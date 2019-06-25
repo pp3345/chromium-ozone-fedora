@@ -28,18 +28,6 @@ diff -up chromium-75.0.3770.100/components/policy/core/common/policy_map.cc.el7-
  
  PolicyMap::Entry PolicyMap::Entry::DeepCopy() const {
    Entry copy;
-diff -up chromium-75.0.3770.100/components/signin/core/browser/account_info.cc.el7-noexcept chromium-75.0.3770.100/components/signin/core/browser/account_info.cc
---- chromium-75.0.3770.100/components/signin/core/browser/account_info.cc.el7-noexcept	2019-06-20 10:17:27.444446463 -0400
-+++ chromium-75.0.3770.100/components/signin/core/browser/account_info.cc	2019-06-20 10:19:17.959532865 -0400
-@@ -51,7 +51,7 @@ CoreAccountInfo::CoreAccountInfo(CoreAcc
- CoreAccountInfo& CoreAccountInfo::operator=(const CoreAccountInfo& other) =
-     default;
- 
--CoreAccountInfo& CoreAccountInfo::operator=(CoreAccountInfo&& other) noexcept =
-+CoreAccountInfo& CoreAccountInfo::operator=(CoreAccountInfo&& other) =
-     default;
- 
- bool CoreAccountInfo::IsEmpty() const {
 diff -up chromium-75.0.3770.100/gpu/config/gpu_info.cc.el7-noexcept chromium-75.0.3770.100/gpu/config/gpu_info.cc
 --- chromium-75.0.3770.100/gpu/config/gpu_info.cc.el7-noexcept	2019-06-18 11:48:10.000000000 -0400
 +++ chromium-75.0.3770.100/gpu/config/gpu_info.cc	2019-06-20 10:17:27.445446437 -0400
