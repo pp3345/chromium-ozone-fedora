@@ -282,7 +282,7 @@ Patch64:	chromium-77.0.3865.75-certificate-transparency.patch
 Patch65:	chromium-77.0.3865.75-unbundle-zlib.patch
 # Needs to be submitted..
 Patch66:	chromium-77.0.3865.75-gcc-include-memory.patch
-# Needs to be submitted..
+# https://chromium.googlesource.com/chromium/src/+/6b633c4b14850df376d5cec571699018772f358e
 Patch67:	chromium-77.0.3865.75-base-gcc-no-alignas.patch
 # https://chromium.googlesource.com/chromium/src/+/27e25336b8316ff3ec4e464058682ed85801fd06
 Patch68:	chromium-77.0.3865.75-harfbuzz-subset.patch
