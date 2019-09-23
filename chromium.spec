@@ -222,7 +222,7 @@ Patch60:	chromium-77.0.3865.75-missing-limits.patch
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
 # el7 only patch
-Patch102:	chromium-77.0.3865.75-el7-noexcept.patch
+Patch102:	chromium-77.0.3865.90-el7-noexcept.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
