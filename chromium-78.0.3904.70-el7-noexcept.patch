@@ -96,8 +96,8 @@ diff -up chromium-78.0.3904.70/components/policy/core/common/policy_map.cc.el7-n
    Entry copy;
 diff -up chromium-78.0.3904.70/components/search_provider_logos/logo_common.cc.el7-noexcept chromium-78.0.3904.70/components/search_provider_logos/logo_common.cc
 --- chromium-78.0.3904.70/components/search_provider_logos/logo_common.cc.el7-noexcept	2019-10-30 09:27:30.773143557 -0400
-+++ chromium-78.0.3904.70/components/search_provider_logos/logo_common.cc	2019-10-30 09:28:32.026733935 -0400
-@@ -14,7 +14,7 @@ LogoMetadata::LogoMetadata() = default;
++++ chromium-78.0.3904.70/components/search_provider_logos/logo_common.cc	2019-10-30 13:09:43.872691009 -0400
+@@ -14,14 +14,14 @@ LogoMetadata::LogoMetadata() = default;
  LogoMetadata::LogoMetadata(const LogoMetadata&) = default;
  LogoMetadata::LogoMetadata(LogoMetadata&&) noexcept = default;
  LogoMetadata& LogoMetadata::operator=(const LogoMetadata&) = default;
@@ -106,6 +106,23 @@ diff -up chromium-78.0.3904.70/components/search_provider_logos/logo_common.cc.e
  LogoMetadata::~LogoMetadata() = default;
  
  EncodedLogo::EncodedLogo() = default;
+ EncodedLogo::EncodedLogo(const EncodedLogo&) = default;
+ EncodedLogo::EncodedLogo(EncodedLogo&&) noexcept = default;
+ EncodedLogo& EncodedLogo::operator=(const EncodedLogo&) = default;
+-EncodedLogo& EncodedLogo::operator=(EncodedLogo&&) noexcept = default;
++EncodedLogo& EncodedLogo::operator=(EncodedLogo&&) = default;
+ EncodedLogo::~EncodedLogo() = default;
+ 
+ Logo::Logo() = default;
+@@ -29,7 +29,7 @@ Logo::~Logo() = default;
+ 
+ LogoCallbacks::LogoCallbacks() = default;
+ LogoCallbacks::LogoCallbacks(LogoCallbacks&&) noexcept = default;
+-LogoCallbacks& LogoCallbacks::operator=(LogoCallbacks&&) noexcept = default;
++LogoCallbacks& LogoCallbacks::operator=(LogoCallbacks&&) = default;
+ LogoCallbacks::~LogoCallbacks() = default;
+ 
+ }  // namespace search_provider_logos
 diff -up chromium-78.0.3904.70/components/signin/public/identity_manager/account_info.cc.el7-noexcept chromium-78.0.3904.70/components/signin/public/identity_manager/account_info.cc
 --- chromium-78.0.3904.70/components/signin/public/identity_manager/account_info.cc.el7-noexcept	2019-10-21 15:06:30.000000000 -0400
 +++ chromium-78.0.3904.70/components/signin/public/identity_manager/account_info.cc	2019-10-30 09:26:51.629050326 -0400
