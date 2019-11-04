@@ -439,6 +439,7 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(gtk+-2.0)
 %endif
 BuildRequires:	/usr/bin/python2
+BuildRequires:	python2-devel
 %if 0%{?bundlepylibs}
 # Using bundled bits, do nothing.
 %else
@@ -456,7 +457,6 @@ BuildRequires:	python-markupsafe
 BuildRequires:	python-ply
 %endif
 BuildRequires:	python2-simplejson
-BuildRequires:	python2-devel
 %endif
 %if 0%{?bundlere2}
 # Using bundled bits, do nothing.
