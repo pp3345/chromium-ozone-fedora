@@ -344,10 +344,18 @@ BuildRequires:	libusb-devel
 BuildRequires:	libXdamage-devel
 BuildRequires:	libXScrnSaver-devel
 BuildRequires:	libXtst-devel
+# Old Fedora (before 30) uses the 1.2 minizip by default.
+# Newer Fedora needs to use the compat package
 %if 0%{?fedora} >= 30
 BuildRequires:	minizip-compat-devel
 %else
+# RHEL 8 needs to use the compat-minizip (provided by minizip1.2)
+%if 0%{?rhel} >= 8
+BuildRequires:	minizip-compat-devel
+%else
+# RHEL 7 and older uses the old minizip
 BuildRequires:	minizip-devel
+%endif
 %endif
 # RHEL 7's nodejs is too old
 %if 0%{?rhel} == 7
