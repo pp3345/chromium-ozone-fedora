@@ -167,7 +167,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.3904.87
+Version:	%{majorversion}.0.3904.97
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -344,10 +344,18 @@ BuildRequires:	libusb-devel
 BuildRequires:	libXdamage-devel
 BuildRequires:	libXScrnSaver-devel
 BuildRequires:	libXtst-devel
+# Old Fedora (before 30) uses the 1.2 minizip by default.
+# Newer Fedora needs to use the compat package
 %if 0%{?fedora} >= 30
 BuildRequires:	minizip-compat-devel
 %else
+# RHEL 8 needs to use the compat-minizip (provided by minizip1.2)
+%if 0%{?rhel} >= 8
+BuildRequires:	minizip-compat-devel
+%else
+# RHEL 7 and older uses the old minizip
 BuildRequires:	minizip-devel
+%endif
 %endif
 # RHEL 7's nodejs is too old
 %if 0%{?rhel} == 7
@@ -439,6 +447,7 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(gtk+-2.0)
 %endif
 BuildRequires:	/usr/bin/python2
+BuildRequires:	python2-devel
 %if 0%{?bundlepylibs}
 # Using bundled bits, do nothing.
 %else
@@ -456,7 +465,6 @@ BuildRequires:	python-markupsafe
 BuildRequires:	python-ply
 %endif
 BuildRequires:	python2-simplejson
-BuildRequires:	python2-devel
 %endif
 %if 0%{?bundlere2}
 # Using bundled bits, do nothing.
@@ -1718,6 +1726,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Thu Nov  7 2019 Tom Callaway <spot@fedoraproject.org> - 78.0.3904.97-1
+- update to 78.0.3904.97
+
 * Fri Nov  1 2019 Tom Callaway <spot@fedoraproject.org> - 78.0.3904.87-1
 - update to 78.0.3904.87
 - apply most of the freeworld changes in PR 23/24/25
