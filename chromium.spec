@@ -167,7 +167,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.3904.87
+Version:	%{majorversion}.0.3904.97
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -1726,6 +1726,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Thu Nov  7 2019 Tom Callaway <spot@fedoraproject.org> - 78.0.3904.97-1
+- update to 78.0.3904.97
+
 * Fri Nov  1 2019 Tom Callaway <spot@fedoraproject.org> - 78.0.3904.87-1
 - update to 78.0.3904.87
 - apply most of the freeworld changes in PR 23/24/25
