@@ -168,7 +168,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.3904.97
-Release:	1%{?dist}
+Release:	2%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -255,6 +255,9 @@ Patch67:	chromium-78.0.3904.70-v8-tracedreference-fix.patch
 Patch68:	v8-implement-tracedreference.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-77-clang.patch
 Patch69:	chromium-77-clang.patch
+# Needs upstreaming
+Patch70:	chromium-78.0.3904.97-glibc-clock-nanosleep.patch
+
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -806,6 +809,7 @@ udev.
 %patch67 -p1 -b .implement-TraceWrapperV8Reference-without-destructor
 %patch68 -p1 -b .v8-implement-tracedreference
 %patch69 -p1 -b .clang-supports-location-builtins
+%patch70 -p1 -b .glibc-clock-nanosleep
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1726,6 +1730,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Sun Nov 17 2019 Tom Callaway <spot@fedoraproject.org> - 78.0.3904.97-2
+- allow clock_nanosleep through seccomp (bz #1773289)
+
 * Thu Nov  7 2019 Tom Callaway <spot@fedoraproject.org> - 78.0.3904.97-1
 - update to 78.0.3904.97
 
