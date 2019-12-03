@@ -234,6 +234,8 @@ Patch60:	chromium-79.0.3945.56-glibc-clock-nanosleep.patch
 Patch61:	chromium-79.0.3945.56-gcc-name-clash.patch
 # https://chromium.googlesource.com/chromium/src/+/528e9a3e1f25bd264549c4c7779748abfd16bb1c
 Patch62:	chromium-79-gcc-permissive.patch
+# /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
+Patch63:	chromium-79.0.3945.56-fix-find_if.patch
 
 
 # Use lstdc++ on EPEL7 only
@@ -777,6 +779,7 @@ udev.
 %patch60 -p1 -b .glibc-clock-nanosleep
 %patch61 -p1 -b .gcc-name-clash
 %patch62 -p1 -b .gcc-permissive
+%patch63 -p1 -b .fix-find_if
 
 # Fedora branded user agent
 %if 0%{?fedora}
