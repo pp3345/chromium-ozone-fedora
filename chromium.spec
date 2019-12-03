@@ -137,13 +137,6 @@ BuildRequires:  libicu-devel >= 5.4
 %global bundleharfbuzz 0
 %endif
 
-# Pulseaudio changed the API a little in 12.99.1
-%if 0%{?fedora} > 30
-%global pulseaudioapichange 1
-%else
-%global pulseaudioapichange 0
-%endif
-
 ### Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
 ### Note: These are for Fedora use ONLY.
 ### For your own distribution, please get your own set of keys.
@@ -160,14 +153,14 @@ BuildRequires:  libicu-devel >= 5.4
 %global chromoting_client_id %nil
 %endif
 
-%global majorversion 78
+%global majorversion 79
 
 %if %{freeworld}
 Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.3904.108
+Version:	%{majorversion}.0.3945.56
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -209,11 +202,11 @@ Patch9:		chromium-70.0.3538.67-disable-fontconfig-cache-magic.patch
 # drop rsp clobber, which breaks gcc9 (thanks to Jeff Law)
 Patch10:	chromium-78.0.3904.70-gcc9-drop-rsp-clobber.patch
 # Try to load widevine from other places
-Patch11:	chromium-widevine-other-locations.patch
+Patch11:	chromium-79.0.3945.56-widevine-other-locations.patch
 # Try to fix version.py for Rawhide
 Patch12:	chromium-71.0.3578.98-py2-bootstrap.patch
 # Add "Fedora" to the user agent string
-Patch13:	chromium-77.0.3865.75-fedora-user-agent.patch
+Patch13:	chromium-79.0.3945.56-fedora-user-agent.patch
 # rename function to avoid conflict with rawhide glibc "gettid()"
 Patch50:	chromium-75.0.3770.80-grpc-gettid-fix.patch
 # Needs to be submitted..
@@ -226,43 +219,27 @@ Patch53:	chromium-78.0.3904.70-unbundle-zlib.patch
 Patch54:	chromium-77.0.3865.75-gcc-include-memory.patch
 # https://chromium.googlesource.com/chromium/src/+/6b633c4b14850df376d5cec571699018772f358e
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-78-gcc-alignas.patch
-Patch55:	chromium-78.0.3904.70-base-gcc-no-alignas.patch
-# https://chromium.googlesource.com/chromium/src/+/e79d9d0e06b825d2e62b38db03248c0e6ceec7e4
-Patch56:	chromium-77.0.3865.120-silence-outdated-build-noise.patch
-# https://chromium.googlesource.com/chromium/src/+/9c3aed099b010a75594a0efd523774c4c9a5e3d2
-Patch57:	chromium-77.0.3865.120-gcc-fix-zlib-symbol-visibility.patch
-# https://chromium.googlesource.com/chromium/src/+/7358ea985cb496fa7fd1a5266f915d98ed4e22e6
-Patch58:	chromium-78.0.3904.70-gcc-fix-invalid-pragma.patch
-# https://chromium.googlesource.com/chromium/src/+/2db67d40ef766c63a73896866a2d66e834cb9716
-Patch59:	chromium-78.0.3904.70-gcc-mark-CheckOpResult-constexpr.patch
-# https://chromium.googlesource.com/chromium/src/+/9662ec844017690d5fd56bf0f05ef6a540dd29c1
-Patch60:	chromium-78.0.3904.70-gcc-sizet-fix.patch
-# https://chromium.googlesource.com/chromium/src/+/f4c3c329588b78af63aad8b401da767242b86709
-Patch61:	chromium-78.0.3904.70-gcc-DohUpgradeEntry-nonconst.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-78-gcc-noexcept.patch
-Patch62:	chromium-78-gcc-noexcept.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-78-pm-crash.patch
-Patch63:	chromium-78-pm-crash.patch
+Patch55:	chromium-79.0.3945.56-base-gcc-no-alignas.patch
+# https://chromium.googlesource.com/chromium/src/+/af77dc4014ead3d898fdc8a7a70fe5063ac9b102
+Patch56:	chromium-79-gcc-ambiguous-nodestructor.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-78-protobuf-export.patch
-Patch64:	chromium-78-protobuf-export.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-78-include.patch
-Patch65:	chromium-78-include.patch
-# https://dev.gentoo.org/~floppym/dist/chromium-78-revert-noexcept-r1.patch.gz
-Patch66:	chromium-78-revert-noexcept-r1.patch
-# https://chromium.googlesource.com/chromium/src/+/9d01bb7f93ba4837b4430417feff845d27a66543
-Patch67:	chromium-78.0.3904.70-v8-tracedreference-fix.patch
-# https://chromium.googlesource.com/v8/v8/+/3677468397fa7f9fad9bbd71e9fb3120bdf67620
-Patch68:	v8-implement-tracedreference.patch
+Patch57:	chromium-78-protobuf-export.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-79-include.patch
+Patch58:	chromium-79-include.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-77-clang.patch
-Patch69:	chromium-77-clang.patch
-# Needs upstreaming
-Patch70:	chromium-78.0.3904.97-glibc-clock-nanosleep.patch
+Patch59:	chromium-77-clang.patch
+# https://chromium.googlesource.com/chromium/src.git/+/54407b422a9cbf775a68c1d57603c0ecac8ce0d7
+Patch60:	chromium-79.0.3945.56-glibc-clock-nanosleep.patch
+# https://chromium.googlesource.com/chromium/src/+/e925deab264e5ebc3c5c13415aa3d44a746e8d45
+Patch61:	chromium-79.0.3945.56-gcc-name-clash.patch
+# https://chromium.googlesource.com/chromium/src/+/528e9a3e1f25bd264549c4c7779748abfd16bb1c
+Patch62:	chromium-79-gcc-permissive.patch
 
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
 # el7 only patch
-Patch102:	chromium-78.0.3904.70-el7-noexcept.patch
+Patch102:	chromium-79.0.3945.56-el7-noexcept.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
@@ -270,8 +247,6 @@ Patch202:	enable-vaapi.patch
 Patch203:	chromium-75.0.3770.80-vaapi-i686-fpermissive.patch
 # Fix compatibility with VA-API library (libva) version 1
 Patch204:	chromium-75.0.3770.80-vaapi-libva1-compatibility.patch
-# Pulseaudio changed the API a little in 12.99.1
-Patch205:	chromium-76.0.3809.100-pulse-api-change.patch
 
 # Apply these patches to work around EPEL8 issues
 Patch300:	chromium-76.0.3809.132-rhel8-force-disable-use_gnome_keyring.patch
@@ -795,21 +770,13 @@ udev.
 %patch53 -p1 -b .unbundle-zlib
 %patch54 -p1 -b .gcc-include-memory
 %patch55 -p1 -b .base-gcc-no-alignas
-%patch56 -p1 -b .silence-outdated-build-noise
-%patch57 -p1 -b .gcc-fix-zlib-symbol-visibility
-%patch58 -p1 -b .gcc-invalid-pragma
-%patch59 -p1 -b .gcc-mark-CheckOpResult-constexpr
-%patch60 -p1 -b .gcc-sizet
-%patch61 -p1 -b .gcc-DohUpgradeEntry-nonconst
-%patch62 -p1 -b .gcc-v8-noexcept
-%patch63 -p1 -b .pm-crash
-%patch64 -p1 -b .protobuf-export
-%patch65 -p1 -b .missing-includes
-%patch66 -p1 -b .gentoo-revert-noexcept
-%patch67 -p1 -b .implement-TraceWrapperV8Reference-without-destructor
-%patch68 -p1 -b .v8-implement-tracedreference
-%patch69 -p1 -b .clang-supports-location-builtins
-%patch70 -p1 -b .glibc-clock-nanosleep
+%patch56 -p1 -b .gcc-ambiguous-nodestructor
+%patch57 -p1 -b .protobuf-export
+%patch58 -p1 -b .missing-includes
+%patch59 -p1 -b .clang-supports-location-builtins
+%patch60 -p1 -b .glibc-clock-nanosleep
+%patch61 -p1 -b .gcc-name-clash
+%patch62 -p1 -b .gcc-permissive
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -829,10 +796,6 @@ udev.
 %patch203 -p1 -b .i686permissive
 %patch204 -p1 -b .va1compat
 %endif
-%endif
-
-%if 0%{?pulseaudioapichange}
-%patch205 -p1 -b .pulseaudioapichange
 %endif
 
 %if 0%{?rhel} == 8
@@ -1054,12 +1017,12 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/flot' \
 	'third_party/fontconfig' \
 	'third_party/freetype' \
+	'third_party/glslang' \
 	'third_party/google_input_tools' \
 	'third_party/google_input_tools/third_party/closure_library' \
 	'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
 	'third_party/google_trust_services' \
 	'third_party/googletest' \
-	'third_party/glslang' \
 	'third_party/grpc' \
 	'third_party/grpc/src/third_party/nanopb' \
 	'third_party/harfbuzz-ng' \
@@ -1089,11 +1052,11 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/libusb' \
 	'third_party/libvpx' \
 	'third_party/libvpx/source/libvpx/third_party/x86inc' \
+	'third_party/libwebm' \
+	'third_party/libwebp' \
 	'third_party/libxml' \
 	'third_party/libxml/chromium' \
 	'third_party/libxslt' \
-	'third_party/libwebm' \
-	'third_party/libwebp' \
 	'third_party/libyuv' \
 	'third_party/lss' \
 	'third_party/lzma_sdk' \
@@ -1106,13 +1069,13 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/nasm' \
 	'third_party/node' \
 	'third_party/node/node_modules/polymer-bundler/lib/third_party/UglifyJS2' \
+	'third_party/one_euro_filter' \
 %if %{freeworld}
 	'third_party/openh264' \
 %endif
 	'third_party/openscreen' \
 	'third_party/openscreen/src/third_party/tinycbor' \
 	'third_party/opus' \
-	'third_party/one_euro_filter' \
 	'third_party/ots' \
 	'third_party/pdfium' \
 	'third_party/pdfium/third_party/agg23' \
@@ -1143,8 +1106,8 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/simplejson' \
 	'third_party/sinonjs' \
 	'third_party/skia' \
-	'third_party/skia/include/third_party/vulkan' \
 	'third_party/skia/include/third_party/skcms' \
+	'third_party/skia/include/third_party/vulkan' \
 	'third_party/skia/third_party/gif' \
 	'third_party/skia/third_party/skcms' \
 	'third_party/skia/third_party/vulkan' \
@@ -1155,9 +1118,10 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/SPIRV-Tools' \
 	'third_party/sqlite' \
 	'third_party/swiftshader' \
-	'third_party/swiftshader/third_party/subzero' \
 	'third_party/swiftshader/third_party/llvm-subzero' \
 	'third_party/swiftshader/third_party/llvm-7.0' \
+	'third_party/swiftshader/third_party/marl' \
+	'third_party/swiftshader/third_party/subzero' \
 	'third_party/swiftshader/third_party/SPIRV-Headers' \
 	'third_party/tcmalloc' \
 	'third_party/test_fonts' \
@@ -1730,6 +1694,10 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Dec  3 2019 Tom Callaway <spot@fedoraproject.org> - 79.0.3945.56-1
+- update to current beta (rawhide only)
+- switch to upstream patch for clock_nanosleep fix
+
 * Mon Nov 25 2019 Tom Callaway <spot@fedoraproject.org> - 78.0.3904.108-1
 - update to 78.0.3904.108
 
