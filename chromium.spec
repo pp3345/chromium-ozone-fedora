@@ -27,7 +27,7 @@
 %global shared 1
 
 # NEVER EVER EVER turn this on in official builds
-%global freeworld 1
+%global freeworld 0
 %if %{freeworld}
 %global lsuffix freeworld
 %if 0%{?shared}
