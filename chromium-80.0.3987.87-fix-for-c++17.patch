@@ -176,3 +176,15 @@ diff -up chromium-80.0.3987.106/device/bluetooth/bluetooth_adapter.cc.c17fix chr
      base::TimeDelta::FromSeconds(180);
  
  }  // namespace device
+diff -up chromium-80.0.3987.122/content/browser/web_package/signed_exchange_prologue.cc.c17fix chromium-80.0.3987.122/content/browser/web_package/signed_exchange_prologue.cc
+--- chromium-80.0.3987.122/content/browser/web_package/signed_exchange_prologue.cc.c17fix	2020-02-27 13:48:15.815885662 -0500
++++ chromium-80.0.3987.122/content/browser/web_package/signed_exchange_prologue.cc	2020-02-27 13:48:24.146711682 -0500
+@@ -30,7 +30,7 @@ constexpr size_t kMaximumCBORHeaderLengt
+ 
+ namespace signed_exchange_prologue {
+ 
+-constexpr size_t BeforeFallbackUrl::kEncodedSizeInBytes =
++const extern size_t BeforeFallbackUrl::kEncodedSizeInBytes =
+     sizeof(kSignedExchangeMagic) + kFallbackUrlLengthFieldSizeInBytes;
+ 
+ size_t Parse2BytesEncodedLength(base::span<const uint8_t> input) {
