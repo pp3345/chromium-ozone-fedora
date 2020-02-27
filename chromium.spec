@@ -261,7 +261,7 @@ Patch102:	chromium-79.0.3945.56-el7-noexcept.patch
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
 Patch202:	enable-vaapi.patch
-Patch203:	chromium-75.0.3770.80-vaapi-i686-fpermissive.patch
+Patch203:	chromium-80.0.3987.122-vaapi-i686-fpermissive.patch
 # Fix compatibility with VA-API library (libva) version 1
 Patch205:	fixvaapionintel.patch
 
