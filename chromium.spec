@@ -1734,6 +1734,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 * Wed Feb  5 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.87-1
 - update to 80.0.3987.87
 
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 79.0.3945.130-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Fri Jan 17 2020 Tom Callaway <spot@fedoraproject.org> - 79.0.3945.130-1
 - update to 79.0.3945.130
 
