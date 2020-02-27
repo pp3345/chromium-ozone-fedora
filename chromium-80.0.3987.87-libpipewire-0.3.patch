@@ -1,0 +1,12 @@
+diff -up chromium-80.0.3987.87/third_party/webrtc/modules/desktop_capture/BUILD.gn.pipewire03 chromium-80.0.3987.87/third_party/webrtc/modules/desktop_capture/BUILD.gn
+--- chromium-80.0.3987.87/third_party/webrtc/modules/desktop_capture/BUILD.gn.pipewire03	2020-02-11 13:12:07.006990450 -0500
++++ chromium-80.0.3987.87/third_party/webrtc/modules/desktop_capture/BUILD.gn	2020-02-11 13:12:16.294795251 -0500
+@@ -190,7 +190,7 @@ if (is_linux) {
+ 
+     if (rtc_link_pipewire) {
+       pkg_config("pipewire") {
+-        packages = [ "libpipewire-0.2" ]
++        packages = [ "libpipewire-0.3", "libspa-0.2" ]
+       }
+     } else {
+       # When libpipewire is not directly linked, use stubs to allow for dlopening of
