@@ -249,7 +249,7 @@ Patch75:	chromium-80.0.3987.106-missing-cstring-header.patch
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
 # el7 only patch
-Patch102:	chromium-79.0.3945.56-el7-noexcept.patch
+Patch102:	chromium-80.0.3987.132-el7-noexcept.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
