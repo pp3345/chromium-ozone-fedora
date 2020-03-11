@@ -294,7 +294,7 @@ Source17:	GardinerModBug.ttf
 Source18:	GardinerModCat.ttf
 # RHEL 7 needs newer nodejs
 %if 0%{?rhel} == 7
-Source19:	node-v8.9.1-linux-x64.tar.gz
+Source19:	https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.gz
 %endif
 
 # We can assume gcc and binutils.
@@ -945,7 +945,7 @@ export CHROMIUM_HEADLESS_GN_DEFINES
 %if 0%{?rhel} == 7
 pushd third_party/node/linux
 tar xf %{SOURCE19}
-mv node-v8.9.1-linux-x64 node-linux-x64
+mv node-v10.15.3-linux-x64 node-linux-x64
 popd
 %else
 mkdir -p third_party/node/linux/node-linux-x64/bin
