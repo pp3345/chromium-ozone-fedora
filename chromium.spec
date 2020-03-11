@@ -158,7 +158,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.3987.122
+Version:	%{majorversion}.0.3987.132
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -224,11 +224,6 @@ Patch57:	chromium-78-protobuf-export.patch
 Patch59:	chromium-77-clang.patch
 # /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
 Patch63:	chromium-79.0.3945.56-fix-find_if.patch
-# Work around situation with gcc10 where
-# modifying a const object is not allowed in a constant expression
-# except in a very specific case in c++17
-# https://bugs.chromium.org/p/chromium/issues/detail?id=1045963
-Patch64:	chromium-79.0.3945.130-gcc10-use-c++17-to-work-around-ugly-angle-code.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-incomplete-type.patch
 Patch65:	chromium-80-gcc-incomplete-type.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-include.patch
@@ -247,8 +242,6 @@ Patch71:	chromium-80.0.3987.87-missing-string-header.patch
 Patch72:	chromium-80.0.3987.87-missing-cstdint-header.patch
 # ../../third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h:34:3: error: 'size_t' does not name a type
 Patch73:	chromium-80.0.3987.106-missing-cstddef-header.patch
-# Because of Patch64, we need to force std::as_const with c++17
-Patch74:	chromium-80.0.3987.87-fix-for-c++17.patch
 # Missing <cstring> (thanks c++17)
 Patch75:	chromium-80.0.3987.106-missing-cstring-header.patch
 
@@ -790,10 +783,6 @@ udev.
 %patch57 -p1 -b .protobuf-export
 %patch59 -p1 -b .clang-supports-location-builtins
 %patch63 -p1 -b .fix-find_if
-%if 0%{?fedora} >= 32
-%patch64 -p1 -b .gcc10-angle
-%patch74 -p1 -b .c17
-%endif
 %patch65 -p1 -b .gcc-incomplete-type
 %patch66 -p1 -b .includefix
 %patch67 -p1 -b .gcc-abstract
@@ -1725,6 +1714,10 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Thu Feb 27 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.132-1
+- update to 80.0.3987.132
+- disable C++17 changes (this means f32+ will no longer build, but it segfaulted immediately)
+
 * Thu Feb 27 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.122-1
 - update to 80.0.3987.122
 
