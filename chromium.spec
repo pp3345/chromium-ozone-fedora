@@ -863,9 +863,15 @@ cp %{SOURCE109} .
 cp %{SOURCE110} .
 cp %{SOURCE111} .
 %else
+%if 0%{?fedora} >= 33
+cp -a /usr/share/fonts/google-arimo-fonts/Arimo-*.ttf .
+cp -a /usr/share/fonts/google-cousine-fonts/Cousine-*.ttf .
+cp -a /usr/share/fonts/google-tinos-fonts/Tinos-*.ttf .
+%else
 cp -a /usr/share/fonts/google-croscore/Arimo-*.ttf .
 cp -a /usr/share/fonts/google-croscore/Cousine-*.ttf .
 cp -a /usr/share/fonts/google-croscore/Tinos-*.ttf .
+%endif
 %endif
 %if 0%{?rhel} == 7
 tar xf %{SOURCE112}
