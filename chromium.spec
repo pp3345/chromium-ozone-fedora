@@ -158,7 +158,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.3987.132
+Version:	%{majorversion}.0.3987.149
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -249,7 +249,7 @@ Patch75:	chromium-80.0.3987.106-missing-cstring-header.patch
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
 # el7 only patch
-Patch102:	chromium-79.0.3945.56-el7-noexcept.patch
+Patch102:	chromium-80.0.3987.132-el7-noexcept.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
@@ -294,7 +294,7 @@ Source17:	GardinerModBug.ttf
 Source18:	GardinerModCat.ttf
 # RHEL 7 needs newer nodejs
 %if 0%{?rhel} == 7
-Source19:	node-v8.9.1-linux-x64.tar.gz
+Source19:	https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.gz
 %endif
 
 # We can assume gcc and binutils.
@@ -863,9 +863,15 @@ cp %{SOURCE109} .
 cp %{SOURCE110} .
 cp %{SOURCE111} .
 %else
+%if 0%{?fedora} >= 33
+cp -a /usr/share/fonts/google-arimo-fonts/Arimo-*.ttf .
+cp -a /usr/share/fonts/google-cousine-fonts/Cousine-*.ttf .
+cp -a /usr/share/fonts/google-tinos-fonts/Tinos-*.ttf .
+%else
 cp -a /usr/share/fonts/google-croscore/Arimo-*.ttf .
 cp -a /usr/share/fonts/google-croscore/Cousine-*.ttf .
 cp -a /usr/share/fonts/google-croscore/Tinos-*.ttf .
+%endif
 %endif
 %if 0%{?rhel} == 7
 tar xf %{SOURCE112}
@@ -945,7 +951,7 @@ export CHROMIUM_HEADLESS_GN_DEFINES
 %if 0%{?rhel} == 7
 pushd third_party/node/linux
 tar xf %{SOURCE19}
-mv node-v8.9.1-linux-x64 node-linux-x64
+mv node-v10.15.3-linux-x64 node-linux-x64
 popd
 %else
 mkdir -p third_party/node/linux/node-linux-x64/bin
@@ -1714,6 +1720,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Wed Mar 18 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.149-1
+- update to 80.0.3987.149
+
 * Thu Feb 27 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.132-1
 - update to 80.0.3987.132
 - disable C++17 changes (this means f32+ will no longer build, but it segfaulted immediately)
