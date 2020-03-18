@@ -158,7 +158,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.3987.132
+Version:	%{majorversion}.0.3987.149
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -1720,6 +1720,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Wed Mar 18 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.149-1
+- update to 80.0.3987.149
+
 * Thu Feb 27 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.132-1
 - update to 80.0.3987.132
 - disable C++17 changes (this means f32+ will no longer build, but it segfaulted immediately)
