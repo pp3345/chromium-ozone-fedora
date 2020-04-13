@@ -151,14 +151,14 @@ BuildRequires:  libicu-devel >= 5.4
 %global chromoting_client_id %nil
 %endif
 
-%global majorversion 80
+%global majorversion 81
 
 %if %{freeworld}
 Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.3987.163
+Version:	%{majorversion}.0.4044.92
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -191,12 +191,12 @@ Patch5:		chromium-60.0.3112.78-jpeg-nomangle.patch
 # Do not mangle zlib
 Patch6:		chromium-77.0.3865.75-no-zlib-mangle.patch
 # Do not use unrar code, it is non-free
-Patch7:		chromium-73.0.3683.75-norar.patch
+Patch7:		chromium-81.0.4044.92-norar.patch
 # Use Gentoo's Widevine hack
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-widevine-r3.patch
 Patch8:		chromium-71.0.3578.98-widevine-r3.patch
 # Disable fontconfig cache magic that breaks remoting
-Patch9:		chromium-70.0.3538.67-disable-fontconfig-cache-magic.patch
+Patch9:		chromium-81.0.4044.92-disable-fontconfig-cache-magic.patch
 # drop rsp clobber, which breaks gcc9 (thanks to Jeff Law)
 Patch10:	chromium-78.0.3904.70-gcc9-drop-rsp-clobber.patch
 # Try to load widevine from other places
@@ -212,7 +212,7 @@ Patch51:	chromium-76.0.3809.100-gcc-remoting-constexpr.patch
 # Needs to be submitted.. (ugly hack, needs to be added properly to GN files)
 Patch52:	chromium-78.0.3904.70-vtable-symbol-undefined.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-unbundle-zlib.patch
-Patch53:	chromium-78.0.3904.70-unbundle-zlib.patch
+Patch53:	chromium-81.0.4044.92-unbundle-zlib.patch
 # Needs to be submitted..
 Patch54:	chromium-77.0.3865.75-gcc-include-memory.patch
 # https://chromium.googlesource.com/chromium/src/+/6b633c4b14850df376d5cec571699018772f358e
@@ -224,16 +224,8 @@ Patch57:	chromium-78-protobuf-export.patch
 Patch59:	chromium-77-clang.patch
 # /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
 Patch63:	chromium-79.0.3945.56-fix-find_if.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-incomplete-type.patch
-Patch65:	chromium-80-gcc-incomplete-type.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-include.patch
-Patch66:	chromium-80-include.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-abstract.patch
-Patch67:	chromium-80-gcc-abstract.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-blink.patch
 Patch68:	chromium-80-gcc-blink.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-permissive.patch
-Patch69:	chromium-80-gcc-permissive.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-quiche.patch
 Patch70:	chromium-80-gcc-quiche.patch
 # ../../base/trace_event/trace_event_memory_overhead.h:15:1: note: 'std::string' is defined in header '<string>'; did you forget to '#include <string>'?
@@ -659,6 +651,22 @@ Provides: bundled(xdg-user-dirs)
 # For selinux scriptlet
 Requires(post): /usr/sbin/semanage
 Requires(post): /usr/sbin/restorecon
+%if %{?shared}
+# Do nothing
+%else
+Provides:	chromium-libs = %{version}-%{release}
+Obsoletes:	chromium-libs <= %{version}-%{release}
+Provides:	chromium-libs-media = %{version}-%{release}
+Obsoletes:	chromium-libs-media <= %{version}-%{release}
+# This may not actually be true (depending on how freeworld is set). But what
+# is definite here is that if we're upgrading from a shared build to a static
+# build none of the shared subpackages (or replacement packages) will work at
+# all and without these provides/obsoletes, the upgrade transaction will fail.
+# Since we have no way of conditionalizing whether the user has the freeworld
+# replacement, we just assume they do.
+Provides:	chromium-libs-media-freeworld = %{version}-%{release}
+Obsoletes:	chromium-libs-media-freeworld <= %{version}-%{release}
+%endif
 
 %if %{?freeworld}
 %if %{?shared}
@@ -783,11 +791,7 @@ udev.
 %patch57 -p1 -b .protobuf-export
 %patch59 -p1 -b .clang-supports-location-builtins
 %patch63 -p1 -b .fix-find_if
-%patch65 -p1 -b .gcc-incomplete-type
-%patch66 -p1 -b .includefix
-%patch67 -p1 -b .gcc-abstract
 %patch68 -p1 -b .gcc-blink
-%patch69 -p1 -b .gcc-permissive
 %patch70 -p1 -b .gcc-quiche
 %patch71 -p1 -b .missing-string
 %patch72 -p1 -b .missing-cstdint
@@ -1295,6 +1299,9 @@ FILE=chrome/common/channel_info_posix.cc
 sed -i.orig -e 's/getenv("CHROME_VERSION_EXTRA")/"Fedora Project"/' $FILE
 
 %build
+# Turning the buildsystem up to 11.
+ulimit -n 4096
+
 %if 0%{?rhel} == 7
 . /opt/rh/devtoolset-%{dts_version}/enable
 %endif
@@ -1497,10 +1504,10 @@ mkdir -p %{buildroot}%{chromium_path}/PepperFlash
 # Set SELinux labels - semanage itself will adjust the lib directory naming
 # But only do it when selinux is enabled, otherwise, it gets noisy.
 if selinuxenabled; then
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_browser_channel}
-	semanage fcontext -a -t bin_t /usr/lib/%{chromium_browser_channel}/%{chromium_browser_channel}.sh
-	semanage fcontext -a -t chrome_sandbox_exec_t /usr/lib/chrome-sandbox
-	restorecon -R -v %{chromium_path}/%{chromium_browser_channel}
+	semanage fcontext -a -t bin_t /usr/lib/%{chromium_browser_channel} &>/dev/null || :
+	semanage fcontext -a -t bin_t /usr/lib/%{chromium_browser_channel}/%{chromium_browser_channel}.sh &>/dev/null || :
+	semanage fcontext -a -t chrome_sandbox_exec_t /usr/lib/chrome-sandbox &>/dev/null || :
+	restorecon -R -v %{chromium_path}/%{chromium_browser_channel} &>/dev/null || :
 fi
 
 %pretrans -n chrome-remote-desktop -p <lua> 
@@ -1720,6 +1727,12 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Mon Apr 13 2020 Tom Callaway <spot@fedoraproject.org> - 81.0.4044.92-1
+- update to 81.0.4044.92
+- squelch the selinux output in the post scriptlet
+- add Provides/Obsoletes in case we're build with shared set to 0
+- add ulimit -n 4096 (needed for static builds, probably not harmful for shared builds either)
+
 * Sat Apr  4 2020 Tom Callaway <spot@fedoraproject.org> - 80.0.3987.163-1
 - update to 80.0.3987.163
 
