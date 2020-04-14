@@ -301,7 +301,6 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	expat-devel
 BuildRequires:	flex
 BuildRequires:	fontconfig-devel
-BuildRequires:	GConf2-devel
 BuildRequires:	glib2-devel
 BuildRequires:	glibc-devel
 BuildRequires:	gperf
