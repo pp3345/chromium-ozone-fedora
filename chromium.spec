@@ -163,7 +163,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4044.92
+Version:	%{majorversion}.0.4044.113
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -1751,6 +1751,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Thu Apr 16 2020 Tom Callaway <spot@fedoraproject.org> - 81.0.4044.113-1
+- update to 81.0.4044.113
+
 * Mon Apr 13 2020 Tom Callaway <spot@fedoraproject.org> - 81.0.4044.92-1
 - update to 81.0.4044.92
 - squelch the selinux output in the post scriptlet
