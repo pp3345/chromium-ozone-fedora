@@ -21,14 +21,3 @@ diff -up chromium-80.0.3987.106/third_party/webrtc/modules/audio_processing/aec3
  #include <vector>
  
  #include "absl/types/optional.h"
-diff -up chromium-80.0.3987.106/third_party/openscreen/src/util/trace_logging/scoped_trace_operations.h.memory chromium-80.0.3987.106/third_party/openscreen/src/util/trace_logging/scoped_trace_operations.h
---- chromium-80.0.3987.106/third_party/openscreen/src/util/trace_logging/scoped_trace_operations.h.memory	2020-02-24 11:35:38.283880819 -0500
-+++ chromium-80.0.3987.106/third_party/openscreen/src/util/trace_logging/scoped_trace_operations.h	2020-02-24 11:35:48.366670897 -0500
-@@ -7,6 +7,7 @@
- 
- #include <atomic>
- #include <cstring>
-+#include <memory>
- #include <stack>
- #include <vector>
- 

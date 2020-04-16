@@ -53,3 +53,15 @@ diff -up chromium-80.0.3987.106/third_party/webrtc/modules/include/module_common
  #include <limits>
  
  #include "absl/types/optional.h"
+diff -up chromium-81.0.4044.92/ui/gfx/linux/drm_util_linux.h.missing-cstdint chromium-81.0.4044.92/ui/gfx/linux/drm_util_linux.h
+--- chromium-81.0.4044.92/ui/gfx/linux/drm_util_linux.h.missing-cstdint	2020-04-13 15:33:24.879106867 -0400
++++ chromium-81.0.4044.92/ui/gfx/linux/drm_util_linux.h	2020-04-13 15:33:47.453689695 -0400
+@@ -7,6 +7,8 @@
+ 
+ #include "ui/gfx/buffer_types.h"
+ 
++#include <cstdint>
++
+ namespace ui {
+ 
+ int GetFourCCFormatFromBufferFormat(gfx::BufferFormat format);
