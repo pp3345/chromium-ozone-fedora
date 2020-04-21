@@ -164,7 +164,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4044.113
-Release:	1%{?dist}
+Release:	2%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -547,6 +547,7 @@ Obsoletes:	chromium-v8 <= 3.25.28.18
 # This is a lie. webrtc never had any real version. 0.2 is greater than 0.1
 Provides:	webrtc = 0.2
 Obsoletes:	webrtc <= 0.1
+Requires:	chromium-common%{_isa} = %{version}-%{release}
 %if 0%{?shared}
 %if 0%{?freeworld}
 # chromium-libs-media-freeworld case
@@ -745,6 +746,8 @@ Requires: xorg-x11-server-Xvfb
 Requires: python2-psutil
 %if 0%{?shared}
 Requires: chromium-libs%{_isa} = %{version}-%{release}
+%else
+Requires: chromium-common%{_isa} = %{version}-%{release}
 %endif
 Summary: Remote desktop support for google-chrome & chromium
 
@@ -755,6 +758,8 @@ Remote desktop support for google-chrome & chromium.
 Summary:	WebDriver for Google Chrome/Chromium
 %if 0%{?shared}
 Requires:       chromium-libs%{_isa} = %{version}-%{release}
+%else
+Requires:	chromium-common%{_isa} = %{version}-%{release}
 %endif
 # From Russian Fedora (minus the epoch)
 Provides:	chromedriver-stable = %{version}-%{release}
@@ -1751,6 +1756,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Apr 21 2020 Tom Callaway <spot@fedoraproject.org> - 81.0.4044.113-2
+- add explicit Requires: chromium-common
+
 * Thu Apr 16 2020 Tom Callaway <spot@fedoraproject.org> - 81.0.4044.113-1
 - update to 81.0.4044.113
 
