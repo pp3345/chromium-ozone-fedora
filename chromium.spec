@@ -916,7 +916,12 @@ cp -a /usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf /usr/share/fonts/dejavu-
 %else
 cp -a /usr/share/fonts/dejavu/DejaVuSans.ttf /usr/share/fonts/dejavu/DejaVuSans-Bold.ttf .
 %endif
+%if 0%{?fedora} >= 33
+cp -a /usr/share/fonts/thai-scalable/Garuda.otf .
+sed -i 's|Garuda.ttf|Garuda.otf|g' ../BUILD.gn
+%else
 cp -a /usr/share/fonts/thai-scalable/Garuda.ttf .
+%endif
 cp -a /usr/share/fonts/lohit-devanagari/Lohit-Devanagari.ttf /usr/share/fonts/lohit-tamil/Lohit-Tamil.ttf .
 cp -a /usr/share/fonts/google-noto/NotoSansKhmer-Regular.ttf .
 popd
