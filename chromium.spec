@@ -156,14 +156,14 @@ BuildRequires:  libicu-devel >= 5.4
 %global chromoting_client_id %nil
 %endif
 
-%global majorversion 81
+%global majorversion 83
 
 %if %{freeworld}
 Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4044.138
+Version:	%{majorversion}.0.4103.61
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -196,12 +196,12 @@ Patch5:		chromium-60.0.3112.78-jpeg-nomangle.patch
 # Do not mangle zlib
 Patch6:		chromium-77.0.3865.75-no-zlib-mangle.patch
 # Do not use unrar code, it is non-free
-Patch7:		chromium-81.0.4044.92-norar.patch
+Patch7:		chromium-83.0.4103.61-norar.patch
 # Use Gentoo's Widevine hack
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-widevine-r3.patch
 Patch8:		chromium-71.0.3578.98-widevine-r3.patch
 # Disable fontconfig cache magic that breaks remoting
-Patch9:		chromium-81.0.4044.92-disable-fontconfig-cache-magic.patch
+Patch9:		chromium-83.0.4103.61-disable-fontconfig-cache-magic.patch
 # drop rsp clobber, which breaks gcc9 (thanks to Jeff Law)
 Patch10:	chromium-78.0.3904.70-gcc9-drop-rsp-clobber.patch
 # Try to load widevine from other places
@@ -229,27 +229,37 @@ Patch57:	chromium-78-protobuf-export.patch
 Patch59:	chromium-77-clang.patch
 # /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
 Patch63:	chromium-79.0.3945.56-fix-find_if.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-blink.patch
-Patch68:	chromium-80-gcc-blink.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-quiche.patch
 Patch70:	chromium-80-gcc-quiche.patch
-# ../../base/trace_event/trace_event_memory_overhead.h:15:1: note: 'std::string' is defined in header '<string>'; did you forget to '#include <string>'?
-Patch71:	chromium-80.0.3987.87-missing-string-header.patch
 # ../../third_party/perfetto/include/perfetto/base/task_runner.h:48:55: error: 'uint32_t' has not been declared
 Patch72:	chromium-80.0.3987.87-missing-cstdint-header.patch
 # ../../third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h:34:3: error: 'size_t' does not name a type
-Patch73:	chromium-80.0.3987.106-missing-cstddef-header.patch
+Patch73:	chromium-83.0.4103.61-missing-cstddef-header.patch
 # Missing <cstring> (thanks c++17)
 Patch75:	chromium-80.0.3987.106-missing-cstring-header.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-81-gcc-constexpr.patch
-Patch76:	chromium-81-gcc-constexpr.patch
 # prepare for using system ffmpeg (clean)
 # http://svnweb.mageia.org/packages/cauldron/chromium-browser-stable/current/SOURCES/chromium-53-ffmpeg-no-deprecation-errors.patch?view=markup
 Patch77:	chromium-53-ffmpeg-no-deprecation-errors.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-81-gcc-noexcept.patch
-Patch78:	chromium-81-gcc-noexcept.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-noexcept.patch
+Patch78:	chromium-82-gcc-noexcept.patch
 # ../../base/test/icu_test_util.h:12:1: note: 'std::unique_ptr' is defined in header '<memory>'; did you forget to '#include <memory>'?
 Patch79:	chromium-81.0.4044.92-missing-memory-header.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-incomplete-type.patch
+Patch80:	chromium-82-gcc-incomplete-type.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-template.patch
+Patch81:	chromium-82-gcc-template.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-iterator.patch
+Patch82:	chromium-82-gcc-iterator.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-template.patch
+Patch83:	chromium-83-gcc-template.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-include.patch
+Patch84:	chromium-83-gcc-include.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-permissive.patch
+Patch85:	chromium-83-gcc-permissive.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-iterator.patch
+Patch86:	chromium-83-gcc-iterator.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-serviceworker.patch
+Patch87:	chromium-83-gcc-serviceworker.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -261,9 +271,6 @@ Patch102:	chromium-80.0.3987.132-el7-noexcept.patch
 Patch202:	enable-vaapi.patch
 Patch203:	chromium-80.0.3987.122-vaapi-i686-fpermissive.patch
 Patch205:	chromium-81.0.4044.92-fix-vaapi-on-intel.patch
-# upstream backports to fix vaapi, thanks rpmfusion
-Patch206:	chromium-81-vaapi-r737459.patch
-Patch207:	chromium-81-vaapi-r738595.patch
 
 # Apply these patches to work around EPEL8 issues
 Patch300:	chromium-76.0.3809.132-rhel8-force-disable-use_gnome_keyring.patch
@@ -811,16 +818,21 @@ udev.
 %patch57 -p1 -b .protobuf-export
 %patch59 -p1 -b .clang-supports-location-builtins
 %patch63 -p1 -b .fix-find_if
-%patch68 -p1 -b .gcc-blink
 %patch70 -p1 -b .gcc-quiche
-%patch71 -p1 -b .missing-string
 %patch72 -p1 -b .missing-cstdint
 %patch73 -p1 -b .missing-cstddef
 %patch75 -p1 -b .missing-cstring
-%patch76 -p1 -b .gcc-constexpr
 %patch77 -p1 -b .ffmpeg-deprecations
 %patch78 -p1 -b .gcc-noexcept
 %patch79 -p1 -b .missing-memory
+%patch80 -p1 -b .gcc-incomplete-type
+%patch81 -p1 -b .gcc-template
+%patch82 -p1 -b .gcc-iterator
+%patch83 -p1 -b .gcc-template2
+%patch84 -p1 -b .gcc-include
+%patch85 -p1 -b .gcc-permissive
+%patch86 -p1 -b .gcc-iterator2
+%patch87 -p1 -b .gcc-serviceworker
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -840,8 +852,6 @@ udev.
 %patch203 -p1 -b .i686permissive
 %endif
 %patch205 -p1 -b .vaapi-intel-fix
-%patch206 -p1 -b .r737459
-%patch207 -p1 -b .r738595
 %endif
 
 %if 0%{?rhel} == 8
@@ -1761,6 +1771,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Jun  2 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.61-1
+- update to 83.0.4103.61
+
 * Thu May  7 2020 Tom Callaway <spot@fedoraproject.org> - 81.0.4044.138-1
 - update to 81.0.4044.138
 
