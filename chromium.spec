@@ -1065,6 +1065,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/catapult/common/py_vulcanize/third_party/rcssmin' \
 	'third_party/catapult/common/py_vulcanize/third_party/rjsmin' \
 	'third_party/catapult/third_party/beautifulsoup4' \
+	'third_party/catapult/third_party/google-endpoints' \
 	'third_party/catapult/third_party/html5lib-python' \
 	'third_party/catapult/third_party/polymer' \
 	'third_party/catapult/third_party/six' \
