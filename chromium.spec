@@ -1373,7 +1373,7 @@ ulimit -n 4096
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
 %endif
 
-export PYTHONPATH="../../third_party/pyjson5/src"
+export PYTHONPATH="../../third_party/pyjson5/src:../../third_party/catapult/third_party/google-endpoints"
 
 echo
 # Now do the full browser
