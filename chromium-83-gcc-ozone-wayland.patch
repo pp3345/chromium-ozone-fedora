@@ -1,0 +1,12 @@
+diff -up chromium-83.0.4103.61/ui/ozone/platform/wayland/host/xdg_surface_wrapper_impl.h.gcc-ozone-wayland chromium-83.0.4103.61/ui/ozone/platform/wayland/host/xdg_surface_wrapper_impl.h
+--- chromium-83.0.4103.61/ui/ozone/platform/wayland/host/xdg_surface_wrapper_impl.h.gcc-ozone-wayland	2020-06-05 09:16:08.903282140 -0400
++++ chromium-83.0.4103.61/ui/ozone/platform/wayland/host/xdg_surface_wrapper_impl.h	2020-06-05 09:16:31.131863653 -0400
+@@ -68,7 +68,7 @@ class XDGSurfaceWrapperImpl : public She
+   static void CloseTopLevelV6(void* data,
+                               struct zxdg_toplevel_v6* zxdg_toplevel_v6);
+ 
+-  xdg_surface* xdg_surface() const;
++  struct xdg_surface* xdg_surface() const;
+   zxdg_surface_v6* zxdg_surface() const;
+ 
+  private:
