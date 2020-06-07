@@ -275,7 +275,7 @@ Patch102:	chromium-80.0.3987.132-el7-noexcept.patch
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
 Patch202:	enable-vaapi.patch
-Patch203:	chromium-80.0.3987.122-vaapi-i686-fpermissive.patch
+Patch203:	chromium-83.0.4103.97-vaapi-i686-fpermissive.patch
 Patch205:	chromium-81.0.4044.92-fix-vaapi-on-intel.patch
 
 # Apply these patches to work around EPEL8 issues
