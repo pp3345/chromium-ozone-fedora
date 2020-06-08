@@ -265,8 +265,6 @@ Patch86:	chromium-83-gcc-iterator.patch
 Patch87:	chromium-83-gcc-serviceworker.patch
 # https://chromium.googlesource.com/chromium/src/+/0d3ef4b1247f766eed37c546571a2c872fde2bf2%5E%21/#F0
 Patch88:	chromium-83-gcc-ozone-wayland.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-79-gcc-alignas.patch
-Patch89:	chromium-79-gcc-alignas.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-compatibility.patch
 Patch90:	chromium-83-gcc-compatibility.patch
 
@@ -846,7 +844,6 @@ udev.
 %patch86 -p1 -b .gcc-iterator2
 %patch87 -p1 -b .gcc-serviceworker
 %patch88 -p1 -b .gcc-ozone-wayland
-%patch89 -p1 -b .gcc-alignas
 %patch90 -p1 -b .gcc-compatibility
 
 # Fedora branded user agent
