@@ -17,6 +17,9 @@
 # We usually want this.
 %global build_headless 1
 
+# This doesn't work and it doesn't even build as of Chromium 83
+%global build_remoting 0
+
 # We'd like to always have this on.
 %global use_vaapi 1
 
@@ -156,14 +159,14 @@ BuildRequires:  libicu-devel >= 5.4
 %global chromoting_client_id %nil
 %endif
 
-%global majorversion 81
+%global majorversion 83
 
 %if %{freeworld}
 Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4044.138
+Version:	%{majorversion}.0.4103.97
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -196,12 +199,12 @@ Patch5:		chromium-60.0.3112.78-jpeg-nomangle.patch
 # Do not mangle zlib
 Patch6:		chromium-77.0.3865.75-no-zlib-mangle.patch
 # Do not use unrar code, it is non-free
-Patch7:		chromium-81.0.4044.92-norar.patch
+Patch7:		chromium-83.0.4103.61-norar.patch
 # Use Gentoo's Widevine hack
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium/files/chromium-widevine-r3.patch
 Patch8:		chromium-71.0.3578.98-widevine-r3.patch
 # Disable fontconfig cache magic that breaks remoting
-Patch9:		chromium-81.0.4044.92-disable-fontconfig-cache-magic.patch
+Patch9:		chromium-83.0.4103.61-disable-fontconfig-cache-magic.patch
 # drop rsp clobber, which breaks gcc9 (thanks to Jeff Law)
 Patch10:	chromium-78.0.3904.70-gcc9-drop-rsp-clobber.patch
 # Try to load widevine from other places
@@ -229,27 +232,40 @@ Patch57:	chromium-78-protobuf-export.patch
 Patch59:	chromium-77-clang.patch
 # /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
 Patch63:	chromium-79.0.3945.56-fix-find_if.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-blink.patch
-Patch68:	chromium-80-gcc-blink.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-80-gcc-quiche.patch
 Patch70:	chromium-80-gcc-quiche.patch
-# ../../base/trace_event/trace_event_memory_overhead.h:15:1: note: 'std::string' is defined in header '<string>'; did you forget to '#include <string>'?
-Patch71:	chromium-80.0.3987.87-missing-string-header.patch
 # ../../third_party/perfetto/include/perfetto/base/task_runner.h:48:55: error: 'uint32_t' has not been declared
 Patch72:	chromium-80.0.3987.87-missing-cstdint-header.patch
 # ../../third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h:34:3: error: 'size_t' does not name a type
-Patch73:	chromium-80.0.3987.106-missing-cstddef-header.patch
+Patch73:	chromium-83.0.4103.61-missing-cstddef-header.patch
 # Missing <cstring> (thanks c++17)
 Patch75:	chromium-80.0.3987.106-missing-cstring-header.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-81-gcc-constexpr.patch
-Patch76:	chromium-81-gcc-constexpr.patch
 # prepare for using system ffmpeg (clean)
 # http://svnweb.mageia.org/packages/cauldron/chromium-browser-stable/current/SOURCES/chromium-53-ffmpeg-no-deprecation-errors.patch?view=markup
 Patch77:	chromium-53-ffmpeg-no-deprecation-errors.patch
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-81-gcc-noexcept.patch
-Patch78:	chromium-81-gcc-noexcept.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-noexcept.patch
+Patch78:	chromium-82-gcc-noexcept.patch
 # ../../base/test/icu_test_util.h:12:1: note: 'std::unique_ptr' is defined in header '<memory>'; did you forget to '#include <memory>'?
 Patch79:	chromium-81.0.4044.92-missing-memory-header.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-incomplete-type.patch
+Patch80:	chromium-82-gcc-incomplete-type.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-template.patch
+Patch81:	chromium-82-gcc-template.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-82-gcc-iterator.patch
+Patch82:	chromium-82-gcc-iterator.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-template.patch
+Patch83:	chromium-83-gcc-template.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-include.patch
+Patch84:	chromium-83-gcc-include.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-permissive.patch
+Patch85:	chromium-83-gcc-permissive.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-iterator.patch
+Patch86:	chromium-83-gcc-iterator.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-serviceworker.patch
+Patch87:	chromium-83-gcc-serviceworker.patch
+# https://chromium.googlesource.com/chromium/src/+/0d3ef4b1247f766eed37c546571a2c872fde2bf2%5E%21/#F0
+Patch88:	chromium-83-gcc-ozone-wayland.patch
+
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -259,11 +275,8 @@ Patch102:	chromium-80.0.3987.132-el7-noexcept.patch
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
 Patch202:	enable-vaapi.patch
-Patch203:	chromium-80.0.3987.122-vaapi-i686-fpermissive.patch
+Patch203:	chromium-83.0.4103.97-vaapi-i686-fpermissive.patch
 Patch205:	chromium-81.0.4044.92-fix-vaapi-on-intel.patch
-# upstream backports to fix vaapi, thanks rpmfusion
-Patch206:	chromium-81-vaapi-r737459.patch
-Patch207:	chromium-81-vaapi-r738595.patch
 
 # Apply these patches to work around EPEL8 issues
 Patch300:	chromium-76.0.3809.132-rhel8-force-disable-use_gnome_keyring.patch
@@ -737,6 +750,7 @@ Shared libraries used by the chromium media subsystem.
 %endif
 %endif
 
+%if %{build_remoting}
 %package -n chrome-remote-desktop
 Requires(pre): shadow-utils
 Requires(post): systemd
@@ -753,6 +767,7 @@ Summary: Remote desktop support for google-chrome & chromium
 
 %description -n chrome-remote-desktop
 Remote desktop support for google-chrome & chromium.
+%endif
 
 %package -n chromedriver
 Summary:	WebDriver for Google Chrome/Chromium
@@ -811,16 +826,22 @@ udev.
 %patch57 -p1 -b .protobuf-export
 %patch59 -p1 -b .clang-supports-location-builtins
 %patch63 -p1 -b .fix-find_if
-%patch68 -p1 -b .gcc-blink
 %patch70 -p1 -b .gcc-quiche
-%patch71 -p1 -b .missing-string
 %patch72 -p1 -b .missing-cstdint
 %patch73 -p1 -b .missing-cstddef
 %patch75 -p1 -b .missing-cstring
-%patch76 -p1 -b .gcc-constexpr
 %patch77 -p1 -b .ffmpeg-deprecations
 %patch78 -p1 -b .gcc-noexcept
 %patch79 -p1 -b .missing-memory
+%patch80 -p1 -b .gcc-incomplete-type
+%patch81 -p1 -b .gcc-template
+%patch82 -p1 -b .gcc-iterator
+%patch83 -p1 -b .gcc-template2
+%patch84 -p1 -b .gcc-include
+%patch85 -p1 -b .gcc-permissive
+%patch86 -p1 -b .gcc-iterator2
+%patch87 -p1 -b .gcc-serviceworker
+%patch88 -p1 -b .gcc-ozone-wayland
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -840,8 +861,6 @@ udev.
 %patch203 -p1 -b .i686permissive
 %endif
 %patch205 -p1 -b .vaapi-intel-fix
-%patch206 -p1 -b .r737459
-%patch207 -p1 -b .r738595
 %endif
 
 %if 0%{?rhel} == 8
@@ -916,7 +935,12 @@ cp -a /usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf /usr/share/fonts/dejavu-
 %else
 cp -a /usr/share/fonts/dejavu/DejaVuSans.ttf /usr/share/fonts/dejavu/DejaVuSans-Bold.ttf .
 %endif
+%if 0%{?fedora} >= 33
+cp -a /usr/share/fonts/thai-scalable/Garuda.otf .
+sed -i 's|Garuda.ttf|Garuda.otf|g' ../BUILD.gn
+%else
 cp -a /usr/share/fonts/thai-scalable/Garuda.ttf .
+%endif
 cp -a /usr/share/fonts/lohit-devanagari/Lohit-Devanagari.ttf /usr/share/fonts/lohit-tamil/Lohit-Tamil.ttf .
 cp -a /usr/share/fonts/google-noto/NotoSansKhmer-Regular.ttf .
 popd
@@ -929,7 +953,7 @@ CHROMIUM_CORE_GN_DEFINES+=' is_debug=false'
 CHROMIUM_CORE_GN_DEFINES+=' system_libdir="lib64"'
 %endif
 CHROMIUM_CORE_GN_DEFINES+=' google_api_key="%{api_key}" google_default_client_id="%{default_client_id}" google_default_client_secret="%{default_client_secret}"'
-CHROMIUM_CORE_GN_DEFINES+=' is_clang=false use_sysroot=false use_gold=false fieldtrial_testing_like_official_build=true use_lld=false rtc_enable_symbol_export=true'
+CHROMIUM_CORE_GN_DEFINES+=' is_clang=false use_sysroot=false use_gold=false fieldtrial_testing_like_official_build=true use_lld=false use_ozone=true rtc_enable_symbol_export=true'
 %if %{freeworld}
 CHROMIUM_CORE_GN_DEFINES+=' ffmpeg_branding="ChromeOS" proprietary_codecs=true'
 %else
@@ -959,6 +983,7 @@ CHROMIUM_BROWSER_GN_DEFINES+=' is_component_ffmpeg=false is_component_build=fals
 CHROMIUM_BROWSER_GN_DEFINES+=' blink_symbol_level=0 enable_hangout_services_extension=true'
 CHROMIUM_BROWSER_GN_DEFINES+=' use_aura=true'
 CHROMIUM_BROWSER_GN_DEFINES+=' enable_widevine=true'
+CHROMIUM_BROWSER_GN_DEFINES+=' ozone_platform="x11" ozone_platform_x11=true'
 %if %{use_vaapi}
 %if 0%{?fedora} >= 28
 CHROMIUM_BROWSER_GN_DEFINES+=' use_vaapi=true'
@@ -970,11 +995,11 @@ CHROMIUM_BROWSER_GN_DEFINES+=' rtc_use_pipewire=true rtc_link_pipewire=true'
 export CHROMIUM_BROWSER_GN_DEFINES
 
 CHROMIUM_HEADLESS_GN_DEFINES=""
-CHROMIUM_HEADLESS_GN_DEFINES+=' use_ozone=true ozone_auto_platforms=false ozone_platform="headless" ozone_platform_headless=true'
+CHROMIUM_HEADLESS_GN_DEFINES+=' ozone_auto_platforms=false ozone_platform="headless" ozone_platform_headless=true'
 CHROMIUM_HEADLESS_GN_DEFINES+=' headless_use_embedded_resources=true icu_use_data_file=false v8_use_external_startup_data=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' enable_nacl=false enable_print_preview=false enable_remoting=false use_alsa=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' use_cups=false use_dbus=false use_gio=false use_kerberos=false use_libpci=false'
-CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false'
+CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false'
 export CHROMIUM_HEADLESS_GN_DEFINES
 
 %if 0%{?rhel} == 7
@@ -1040,6 +1065,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/catapult/common/py_vulcanize/third_party/rcssmin' \
 	'third_party/catapult/common/py_vulcanize/third_party/rjsmin' \
 	'third_party/catapult/third_party/beautifulsoup4' \
+	'third_party/catapult/third_party/google-endpoints' \
 	'third_party/catapult/third_party/html5lib-python' \
 	'third_party/catapult/third_party/polymer' \
 	'third_party/catapult/third_party/six' \
@@ -1066,6 +1092,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/devtools-frontend/src/third_party/axe-core' \
 	'third_party/devtools-frontend/src/third_party/typescript' \
 	'third_party/devtools-frontend/src/front_end/third_party/fabricjs' \
+	'third_party/devtools-frontend/src/front_end/third_party/lighthouse' \
 	'third_party/devtools-frontend/src/front_end/third_party/wasmparser' \
 	'third_party/dom_distiller_js' \
 	'third_party/emoji-segmenter' \
@@ -1119,6 +1146,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/libyuv' \
 	'third_party/lss' \
 	'third_party/lzma_sdk' \
+	'third_party/mako' \
 %if 0%{?bundlepylibs}
 	'third_party/markupsafe' \
 %endif
@@ -1161,6 +1189,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 %endif
 	'third_party/rnnoise' \
 	'third_party/s2cellid' \
+	'third_party/schema_org' \
 	'third_party/simplejson' \
 	'third_party/sinonjs' \
 	'third_party/skia' \
@@ -1175,6 +1204,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/SPIRV-Tools' \
 	'third_party/sqlite' \
 	'third_party/swiftshader' \
+	'third_party/swiftshader/third_party/astc-encoder' \
 	'third_party/swiftshader/third_party/llvm-subzero' \
 	'third_party/swiftshader/third_party/llvm-7.0' \
 	'third_party/swiftshader/third_party/marl' \
@@ -1185,6 +1215,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
         'third_party/usb_ids' \
 	'third_party/usrsctp' \
 	'third_party/vulkan' \
+	'third_party/wayland' \
 	'third_party/web-animations-js' \
 	'third_party/webdriver' \
 	'third_party/webrtc' \
@@ -1312,7 +1343,9 @@ tools/gn/bootstrap/bootstrap.py -v --no-clean --gn-gen-args="$CHROMIUM_CORE_GN_D
 %endif
 %endif
 
+%if %{build_remoting}
 %{builddir}/gn --script-executable=/usr/bin/python2 gen --args="$CHROMIUM_CORE_GN_DEFINES $CHROMIUM_BROWSER_GN_DEFINES" %{remotingbuilddir}
+%endif
 
 %if %{bundlelibusbx}
 # no hackity hack hack
@@ -1340,7 +1373,7 @@ ulimit -n 4096
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
 %endif
 
-export PYTHONPATH="../../third_party/pyjson5/src"
+export PYTHONPATH="../../third_party/pyjson5/src:../../third_party/catapult/third_party/google-endpoints"
 
 echo
 # Now do the full browser
@@ -1358,173 +1391,175 @@ echo
 %build_target %{builddir} clear_key_cdm
 %build_target %{builddir} policy_templates
 
+%if %{build_remoting}
 # remote client
 # ../../depot_tools/ninja -C ../%{builddir} -vvv remoting_me2me_host remoting_start_host remoting_it2me_native_messaging_host remoting_me2me_native_messaging_host remoting_native_messaging_manifests remoting_resources
 %build_target %{remotingbuilddir} remoting_all
+%endif
 %endif
 
 %install
 rm -rf %{buildroot}
 
 %if 0%{freeworld}
-mkdir -p %{buildroot}%{chromium_path}
+	mkdir -p %{buildroot}%{chromium_path}
 
-pushd %{builddir}
-cp -a libffmpeg.so* %{buildroot}%{chromium_path}
-cp -a libmedia.so* %{buildroot}%{chromium_path}
-mv %{buildroot}%{chromium_path}/libffmpeg.so{,.%{lsuffix}}
-mv %{buildroot}%{chromium_path}/libffmpeg.so.TOC{,.%{lsuffix}}
-mv %{buildroot}%{chromium_path}/libmedia.so{,.%{lsuffix}}
-mv %{buildroot}%{chromium_path}/libmedia.so.TOC{,.%{lsuffix}}
-popd
+	pushd %{builddir}
+		cp -a libffmpeg.so* %{buildroot}%{chromium_path}
+		cp -a libmedia.so* %{buildroot}%{chromium_path}
+		mv %{buildroot}%{chromium_path}/libffmpeg.so{,.%{lsuffix}}
+		mv %{buildroot}%{chromium_path}/libffmpeg.so.TOC{,.%{lsuffix}}
+		mv %{buildroot}%{chromium_path}/libmedia.so{,.%{lsuffix}}
+		mv %{buildroot}%{chromium_path}/libmedia.so.TOC{,.%{lsuffix}}
+	popd
 %else
-mkdir -p %{buildroot}%{_bindir}
-mkdir -p %{buildroot}%{chromium_path}
-cp -a %{SOURCE3} %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
-export BUILD_TARGET=`cat /etc/redhat-release`
-export CHROMIUM_PATH=%{chromium_path}
-export CHROMIUM_BROWSER_CHANNEL=%{chromium_browser_channel}
-sed -i "s|@@BUILD_TARGET@@|$BUILD_TARGET|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
-sed -i "s|@@CHROMIUM_PATH@@|$CHROMIUM_PATH|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
-sed -i "s|@@CHROMIUM_BROWSER_CHANNEL@@|$CHROMIUM_BROWSER_CHANNEL|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
-%if "%{chromium_channel}" == "%%{nil}"
-sed -i "s|@@EXTRA_FLAGS@@||g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
-%else
-# Enable debug outputs for beta and dev channels
-export EXTRA_FLAGS="--enable-logging=stderr --v=2"
-sed -i "s|@@EXTRA_FLAGS@@|$EXTRA_FLAGS|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
-%endif
+	mkdir -p %{buildroot}%{_bindir}
+	mkdir -p %{buildroot}%{chromium_path}
+	cp -a %{SOURCE3} %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+	export BUILD_TARGET=`cat /etc/redhat-release`
+	export CHROMIUM_PATH=%{chromium_path}
+	export CHROMIUM_BROWSER_CHANNEL=%{chromium_browser_channel}
+	sed -i "s|@@BUILD_TARGET@@|$BUILD_TARGET|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+	sed -i "s|@@CHROMIUM_PATH@@|$CHROMIUM_PATH|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+	sed -i "s|@@CHROMIUM_BROWSER_CHANNEL@@|$CHROMIUM_BROWSER_CHANNEL|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+	%if "%{chromium_channel}" == "%%{nil}"
+		sed -i "s|@@EXTRA_FLAGS@@||g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+	%else
+		# Enable debug outputs for beta and dev channels
+		export EXTRA_FLAGS="--enable-logging=stderr --v=2"
+		sed -i "s|@@EXTRA_FLAGS@@|$EXTRA_FLAGS|g" %{buildroot}%{chromium_path}/%{chromium_browser_channel}.sh
+	%endif
 
-ln -s %{chromium_path}/%{chromium_browser_channel}.sh %{buildroot}%{_bindir}/%{chromium_browser_channel}
-mkdir -p %{buildroot}%{_mandir}/man1/
+	ln -s %{chromium_path}/%{chromium_browser_channel}.sh %{buildroot}%{_bindir}/%{chromium_browser_channel}
+	mkdir -p %{buildroot}%{_mandir}/man1/
 
-pushd %{builddir}
-cp -a *.pak locales resources icudtl.dat %{buildroot}%{chromium_path}
-# Reasonably sure we don't need this anymore. Chrome doesn't include it.
-%if 0
-cp -a protoc pyproto %{buildroot}%{chromium_path}
-%endif
-%ifarch x86_64 i686 aarch64
-cp -a swiftshader %{buildroot}%{chromium_path}
-%endif
-cp -a chrome %{buildroot}%{chromium_path}/%{chromium_browser_channel}
-cp -a chrome_sandbox %{buildroot}%{chromium_path}/chrome-sandbox
-cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
-sed -i "s|@@PACKAGE@@|%{chromium_browser_channel}|g" %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
-sed -i "s|@@MENUNAME@@|%{chromium_menu_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
-# V8 initial snapshots
-# https://code.google.com/p/chromium/issues/detail?id=421063
-cp -a snapshot_blob.bin %{buildroot}%{chromium_path}
-cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
-cp -a xdg-mime xdg-settings %{buildroot}%{chromium_path}
-cp -a MEIPreload %{buildroot}%{chromium_path}
-%if 0%{?shared}
-cp -a lib*.so* %{buildroot}%{chromium_path}
-# cp -p %%{buildroot}%{chromium_path}/libwidevinecdm.so{,.fedora}
-cp -p %{buildroot}%{chromium_path}/libffmpeg.so{,.%{lsuffix}}
-cp -p %{buildroot}%{chromium_path}/libffmpeg.so.TOC{,.%{lsuffix}}
-cp -p %{buildroot}%{chromium_path}/libmedia.so{,.%{lsuffix}}
-cp -p %{buildroot}%{chromium_path}/libmedia.so.TOC{,.%{lsuffix}}
-%endif
+	pushd %{builddir}
+		cp -a *.pak locales resources icudtl.dat %{buildroot}%{chromium_path}
+		%ifarch x86_64 i686 aarch64
+			cp -a swiftshader %{buildroot}%{chromium_path}
+		%endif
+		cp -a chrome %{buildroot}%{chromium_path}/%{chromium_browser_channel}
+		cp -a chrome_sandbox %{buildroot}%{chromium_path}/chrome-sandbox
+		cp -a ../../chrome/app/resources/manpage.1.in %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
+		sed -i "s|@@PACKAGE@@|%{chromium_browser_channel}|g" %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
+		sed -i "s|@@MENUNAME@@|%{chromium_menu_name}|g" %{buildroot}%{_mandir}/man1/%{chromium_browser_channel}.1
+		# V8 initial snapshots
+		# https://code.google.com/p/chromium/issues/detail?id=421063
+		cp -a snapshot_blob.bin %{buildroot}%{chromium_path}
+		cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
+		cp -a xdg-mime xdg-settings %{buildroot}%{chromium_path}
+		cp -a MEIPreload %{buildroot}%{chromium_path}
+		%if 0%{?shared}
+			cp -a lib*.so* %{buildroot}%{chromium_path}
+			# cp -p %%{buildroot}%{chromium_path}/libwidevinecdm.so{,.fedora}
+			cp -p %{buildroot}%{chromium_path}/libffmpeg.so{,.%{lsuffix}}
+			cp -p %{buildroot}%{chromium_path}/libffmpeg.so.TOC{,.%{lsuffix}}
+			cp -p %{buildroot}%{chromium_path}/libmedia.so{,.%{lsuffix}}
+			cp -p %{buildroot}%{chromium_path}/libmedia.so.TOC{,.%{lsuffix}}
+		%endif
 
-# chromedriver
-cp -a chromedriver %{buildroot}%{chromium_path}/chromedriver
-ln -s %{chromium_path}/chromedriver %{buildroot}%{_bindir}/chromedriver
+		# chromedriver
+		cp -a chromedriver %{buildroot}%{chromium_path}/chromedriver
+		ln -s %{chromium_path}/chromedriver %{buildroot}%{_bindir}/chromedriver
 
-# Remote desktop bits
-mkdir -p %{buildroot}%{crd_path}
+		%if %{build_remoting}
+			# Remote desktop bits
+			mkdir -p %{buildroot}%{crd_path}
 
-%if 0%{?shared}
-pushd %{buildroot}%{crd_path}
-for i in ../chromium-browser%{?chromium_channel}/lib*.so; do
-	libname=`basename $i`
-	ln -s $i $libname
-done
-popd
-%endif
-popd
+			%if 0%{?shared}
+				pushd %{buildroot}%{crd_path}
+					for i in ../chromium-browser%{?chromium_channel}/lib*.so; do
+						libname=`basename $i`
+						ln -s $i $libname
+					done
+				popd
+			%endif
+		%endif
+	popd
+	%if %{build_remoting}
+		pushd %{remotingbuilddir}
 
-pushd %{remotingbuilddir}
+			# See remoting/host/installer/linux/Makefile for logic
+			cp -a remoting_native_messaging_host %{buildroot}%{crd_path}/native-messaging-host
+			cp -a remote_assistance_host %{buildroot}%{crd_path}/remote-assistance-host
+			cp -a remoting_locales %{buildroot}%{crd_path}/
+			cp -a remoting_me2me_host %{buildroot}%{crd_path}/chrome-remote-desktop-host
+			cp -a remoting_start_host %{buildroot}%{crd_path}/start-host
+			cp -a remoting_user_session %{buildroot}%{crd_path}/user-session
+			chmod +s %{buildroot}%{crd_path}/user-session
 
-# See remoting/host/installer/linux/Makefile for logic
-cp -a remoting_native_messaging_host %{buildroot}%{crd_path}/native-messaging-host
-cp -a remote_assistance_host %{buildroot}%{crd_path}/remote-assistance-host
-cp -a remoting_locales %{buildroot}%{crd_path}/
-cp -a remoting_me2me_host %{buildroot}%{crd_path}/chrome-remote-desktop-host
-cp -a remoting_start_host %{buildroot}%{crd_path}/start-host
-cp -a remoting_user_session %{buildroot}%{crd_path}/user-session
-chmod +s %{buildroot}%{crd_path}/user-session
+			# chromium
+			mkdir -p %{buildroot}%{_sysconfdir}/chromium/native-messaging-hosts
+			# google-chrome
+			mkdir -p %{buildroot}%{_sysconfdir}/opt/chrome/
+			cp -a remoting/* %{buildroot}%{_sysconfdir}/chromium/native-messaging-hosts/
+			for i in %{buildroot}%{_sysconfdir}/chromium/native-messaging-hosts/*.json; do
+				sed -i 's|/opt/google/chrome-remote-desktop|%{crd_path}|g' $i
+			done
+			mkdir -p %{buildroot}%{_sysconfdir}/opt/chrome/native-messaging-hosts
+			pushd %{buildroot}%{_sysconfdir}/opt/chrome/native-messaging-hosts
+				for i in ../../../chromium/native-messaging-hosts/*; do
+					# rpm gets unhappy when we symlink here
+					cp -a $i .
+				done
+			popd
+		popd
 
-# chromium
-mkdir -p %{buildroot}%{_sysconfdir}/chromium/native-messaging-hosts
-# google-chrome
-mkdir -p %{buildroot}%{_sysconfdir}/opt/chrome/
-cp -a remoting/* %{buildroot}%{_sysconfdir}/chromium/native-messaging-hosts/
-for i in %{buildroot}%{_sysconfdir}/chromium/native-messaging-hosts/*.json; do
-	sed -i 's|/opt/google/chrome-remote-desktop|%{crd_path}|g' $i
-done
-mkdir -p %{buildroot}%{_sysconfdir}/opt/chrome/native-messaging-hosts
-pushd %{buildroot}%{_sysconfdir}/opt/chrome/native-messaging-hosts
-for i in ../../../chromium/native-messaging-hosts/*; do
-# rpm gets unhappy when we symlink here
-	cp -a $i .
-done
-popd
-popd
+		mkdir -p %{buildroot}/var/lib/chrome-remote-desktop
+		touch %{buildroot}/var/lib/chrome-remote-desktop/hashes
 
-mkdir -p %{buildroot}/var/lib/chrome-remote-desktop
-touch %{buildroot}/var/lib/chrome-remote-desktop/hashes
+		mkdir -p %{buildroot}%{_sysconfdir}/pam.d/
+		pushd %{buildroot}%{_sysconfdir}/pam.d/
+		ln -s system-auth chrome-remote-desktop
+	%endif
 
-mkdir -p %{buildroot}%{_sysconfdir}/pam.d/
-pushd %{buildroot}%{_sysconfdir}/pam.d/
-ln -s system-auth chrome-remote-desktop
-popd
+	%if %{build_headless}
+		pushd %{headlessbuilddir}
+			cp -a headless_lib.pak headless_shell %{buildroot}%{chromium_path}
+		popd
+	%endif
 
-%if %{build_headless}
-pushd %{headlessbuilddir}
-cp -a headless_lib.pak headless_shell %{buildroot}%{chromium_path}
-popd
-%endif
+	%if %{build_remoting}
+		cp -a remoting/host/linux/linux_me2me_host.py %{buildroot}%{crd_path}/chrome-remote-desktop
+		cp -a remoting/host/installer/linux/is-remoting-session %{buildroot}%{crd_path}/
 
-cp -a remoting/host/linux/linux_me2me_host.py %{buildroot}%{crd_path}/chrome-remote-desktop
-cp -a remoting/host/installer/linux/is-remoting-session %{buildroot}%{crd_path}/
+		mkdir -p %{buildroot}%{_unitdir}
+		cp -a %{SOURCE11} %{buildroot}%{_unitdir}/
+		sed -i 's|@@CRD_PATH@@|%{crd_path}|g' %{buildroot}%{_unitdir}/chrome-remote-desktop@.service
+	%endif
 
-mkdir -p %{buildroot}%{_unitdir}
-cp -a %{SOURCE11} %{buildroot}%{_unitdir}/
-sed -i 's|@@CRD_PATH@@|%{crd_path}|g' %{buildroot}%{_unitdir}/chrome-remote-desktop@.service
+	# Add directories for policy management
+	mkdir -p %{buildroot}%{_sysconfdir}/chromium/policies/managed
+	mkdir -p %{buildroot}%{_sysconfdir}/chromium/policies/recommended
 
-# Add directories for policy management
-mkdir -p %{buildroot}%{_sysconfdir}/chromium/policies/managed
-mkdir -p %{buildroot}%{_sysconfdir}/chromium/policies/recommended
+	cp -a out/Release/gen/chrome/app/policy/common/html/en-US/*.html .
+	cp -a out/Release/gen/chrome/app/policy/linux/examples/chrome.json .
 
-cp -a out/Release/gen/chrome/app/policy/common/html/en-US/*.html .
-cp -a out/Release/gen/chrome/app/policy/linux/examples/chrome.json .
+	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
+	cp -a chrome/app/theme/chromium/product_logo_256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_browser_channel}.png
+	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
+	cp -a chrome/app/theme/chromium/product_logo_128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_browser_channel}.png
+	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
+	cp -a chrome/app/theme/chromium/product_logo_64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{chromium_browser_channel}.png
+	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
+	cp -a chrome/app/theme/chromium/product_logo_48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_browser_channel}.png
+	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/24x24/apps
+	cp -a chrome/app/theme/chromium/product_logo_24.png %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_browser_channel}.png
 
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
-cp -a chrome/app/theme/chromium/product_logo_256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{chromium_browser_channel}.png
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
-cp -a chrome/app/theme/chromium/product_logo_128.png %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{chromium_browser_channel}.png
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
-cp -a chrome/app/theme/chromium/product_logo_64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{chromium_browser_channel}.png
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
-cp -a chrome/app/theme/chromium/product_logo_48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{chromium_browser_channel}.png
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/24x24/apps
-cp -a chrome/app/theme/chromium/product_logo_24.png %{buildroot}%{_datadir}/icons/hicolor/24x24/apps/%{chromium_browser_channel}.png
+	# Install the master_preferences file
+	mkdir -p %{buildroot}%{_sysconfdir}/%{name}
+	install -m 0644 %{SOURCE13} %{buildroot}%{_sysconfdir}/%{name}/
 
-# Install the master_preferences file
-mkdir -p %{buildroot}%{_sysconfdir}/%{name}
-install -m 0644 %{SOURCE13} %{buildroot}%{_sysconfdir}/%{name}/
+	mkdir -p %{buildroot}%{_datadir}/applications/
+	desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE4}
 
-mkdir -p %{buildroot}%{_datadir}/applications/
-desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE4}
+	install -D -m0644 chrome/installer/linux/common/chromium-browser/chromium-browser.appdata.xml ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_browser_channel}.appdata.xml
+	appstream-util validate-relax --nonet ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_browser_channel}.appdata.xml
 
-install -D -m0644 chrome/installer/linux/common/chromium-browser/chromium-browser.appdata.xml ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_browser_channel}.appdata.xml
-appstream-util validate-relax --nonet ${RPM_BUILD_ROOT}%{_datadir}/metainfo/%{chromium_browser_channel}.appdata.xml
+	mkdir -p %{buildroot}%{_datadir}/gnome-control-center/default-apps/
+	cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
 
-mkdir -p %{buildroot}%{_datadir}/gnome-control-center/default-apps/
-cp -a %{SOURCE9} %{buildroot}%{_datadir}/gnome-control-center/default-apps/
-
-mkdir -p %{buildroot}%{chromium_path}/PepperFlash
+	mkdir -p %{buildroot}%{chromium_path}/PepperFlash
 
 # freeworld conditional
 %endif
@@ -1539,12 +1574,14 @@ if selinuxenabled; then
 	restorecon -R -v %{chromium_path}/%{chromium_browser_channel} &>/dev/null || :
 fi
 
+%if %{build_remoting}
 %pretrans -n chrome-remote-desktop -p <lua> 
 path = "/etc/opt/chrome/native-messaging-hosts"
 st = posix.stat(path)
 if st and st.type == "link" then
   os.remove(path)
 end
+%endif
 
 %if %{shared}
 %if %{freeworld}
@@ -1584,6 +1621,7 @@ fi
 %endif
 %endif
 
+%if %{build_remoting}
 %pre -n chrome-remote-desktop
 getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-desktop
 
@@ -1595,6 +1633,7 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 %postun -n chrome-remote-desktop
 %systemd_postun_with_restart chrome-remote-desktop@.service
+%endif
 
 %if 0%{freeworld}
 # We only build libs-media-freeworld.
@@ -1716,6 +1755,7 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 %{chromium_path}/lib*.so*
 %endif
 
+%if %{build_remoting}
 %files -n chrome-remote-desktop
 %{crd_path}/chrome-remote-desktop
 %{crd_path}/chrome-remote-desktop-host
@@ -1733,6 +1773,7 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 %{crd_path}/user-session
 %{_unitdir}/chrome-remote-desktop@.service
 /var/lib/chrome-remote-desktop/
+%endif
 
 %files -n chromedriver
 %doc AUTHORS
@@ -1756,6 +1797,13 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Sun Jun  7 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-1
+- update to 83.0.4103.97
+
+* Tue Jun  2 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.61-1
+- update to 83.0.4103.61
+- conditionalize and disable remoting
+
 * Thu May  7 2020 Tom Callaway <spot@fedoraproject.org> - 81.0.4044.138-1
 - update to 81.0.4044.138
 
