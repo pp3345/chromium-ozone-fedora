@@ -167,7 +167,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4103.97
-Release:	1%{?dist}
+Release:	2%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -265,6 +265,10 @@ Patch86:	chromium-83-gcc-iterator.patch
 Patch87:	chromium-83-gcc-serviceworker.patch
 # https://chromium.googlesource.com/chromium/src/+/0d3ef4b1247f766eed37c546571a2c872fde2bf2%5E%21/#F0
 Patch88:	chromium-83-gcc-ozone-wayland.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-79-gcc-alignas.patch
+Patch89:	chromium-79-gcc-alignas.patch
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-compatibility.patch
+Patch90:	chromium-83-gcc-compatibility.patch
 
 
 # Use lstdc++ on EPEL7 only
@@ -842,6 +846,8 @@ udev.
 %patch86 -p1 -b .gcc-iterator2
 %patch87 -p1 -b .gcc-serviceworker
 %patch88 -p1 -b .gcc-ozone-wayland
+%patch89 -p1 -b .gcc-alignas
+%patch90 -p1 -b .gcc-compatibility
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1797,6 +1803,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Mon Jun  8 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-2
+- more fixes from gentoo
+
 * Sun Jun  7 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-1
 - update to 83.0.4103.97
 
