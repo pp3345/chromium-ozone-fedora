@@ -167,7 +167,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4103.97
-Release:	2%{?dist}
+Release:	3%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -273,6 +273,8 @@ Patch90:	chromium-83-gcc-compatibility.patch
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
 # el7 only patch
 Patch102:	chromium-80.0.3987.132-el7-noexcept.patch
+# No linux/kcmp.h on EPEL7
+Patch103:	chromium-83.0.4103.97-epel7-no-kcmp-h.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
@@ -855,6 +857,7 @@ udev.
 %if 0%{?rhel} == 7
 %patch101 -p1 -b .epel7
 %patch102 -p1 -b .el7-noexcept
+%patch103 -p1 -b .epel7-kcmp
 %endif
 
 # Feature specific patches
@@ -1800,6 +1803,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Wed Jun 10 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-3
+- fix issue on epel7 where linux/kcmp.h does not exist
+
 * Mon Jun  8 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-2
 - more fixes from gentoo
 
