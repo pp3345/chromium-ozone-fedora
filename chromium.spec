@@ -167,7 +167,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4103.97
-Release:	3%{?dist}
+Release:	4%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -267,6 +267,8 @@ Patch87:	chromium-83-gcc-serviceworker.patch
 Patch88:	chromium-83-gcc-ozone-wayland.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-compatibility.patch
 Patch90:	chromium-83-gcc-compatibility.patch
+# Fix skia's handling of no_sanitize attributes to work with gcc
+Patch91:	chromium-83.0.4103.97-skia-gcc-no_sanitize-fixes.patch
 
 
 # Use lstdc++ on EPEL7 only
@@ -850,6 +852,7 @@ udev.
 %patch87 -p1 -b .gcc-serviceworker
 %patch88 -p1 -b .gcc-ozone-wayland
 %patch90 -p1 -b .gcc-compatibility
+%patch91 -p1 -b .gcc-no_sanitize
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1807,6 +1810,10 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Mon Jun 15 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-4
+- use old cups handling on epel7
+- fix skia attribute overrides with gcc
+
 * Wed Jun 10 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-3
 - fix issue on epel7 where linux/kcmp.h does not exist
 
