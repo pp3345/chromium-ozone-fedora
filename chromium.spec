@@ -275,6 +275,9 @@ Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
 Patch102:	chromium-80.0.3987.132-el7-noexcept.patch
 # No linux/kcmp.h on EPEL7
 Patch103:	chromium-83.0.4103.97-epel7-no-kcmp-h.patch
+# Use old cups (chromium's code workaround breaks on gcc)
+# Revert: https://github.com/chromium/chromium/commit/c3213f8779ddc427e89d982514185ed5e4c94e91
+Patch104:	chromium-83.0.4103.97-epel7-old-cups.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
@@ -858,6 +861,7 @@ udev.
 %patch101 -p1 -b .epel7
 %patch102 -p1 -b .el7-noexcept
 %patch103 -p1 -b .epel7-kcmp
+%patch104 -p1 -b .el7cups
 %endif
 
 # Feature specific patches
