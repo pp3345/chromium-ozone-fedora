@@ -167,7 +167,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4103.97
-Release:	5%{?dist}
+Release:	6%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -269,9 +269,6 @@ Patch88:	chromium-83-gcc-ozone-wayland.patch
 Patch90:	chromium-83-gcc-compatibility.patch
 # Fix skia's handling of no_sanitize attributes to work with gcc
 Patch91:	chromium-83.0.4103.97-skia-gcc-no_sanitize-fixes.patch
-# https://chromium-review.googlesource.com/c/chromium/src/+/2094496
-# https://chromium.googlesource.com/chromium/src/+/bd59ce32629ef684624821419c43967b73d2989e
-Patch92:	chromium-83-gcc-r766770.patch
 
 
 # Use lstdc++ on EPEL7 only
@@ -856,7 +853,6 @@ udev.
 %patch88 -p1 -b .gcc-ozone-wayland
 %patch90 -p1 -b .gcc-compatibility
 %patch91 -p1 -b .gcc-no_sanitize
-%patch92 -p1 -b .gcc-r766770
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1814,6 +1810,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Wed Jun 17 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-6
+- revert last change, I already had it.
+
 * Tue Jun 16 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-5
 - add ServiceWorker fix
 
