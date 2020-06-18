@@ -1,0 +1,45 @@
+diff -up chromium-83.0.4103.97/third_party/skia/include/private/SkVx.h.gcc10-aarch64-hack chromium-83.0.4103.97/third_party/skia/include/private/SkVx.h
+--- chromium-83.0.4103.97/third_party/skia/include/private/SkVx.h.gcc10-aarch64-hack	2020-06-18 14:47:30.912177044 +0000
++++ chromium-83.0.4103.97/third_party/skia/include/private/SkVx.h	2020-06-18 14:51:08.230506417 +0000
+@@ -141,6 +141,15 @@ static inline D bit_pun(const S& s) {
+     return d;
+ }
+ 
++// This is a hack to work around GCC PR95726
++template <typename D, typename S>
++static inline D bit_pun2(const S& s) {
++    static_assert(sizeof(D) == sizeof(S), "");
++    D d;
++    memcpy(&d, &s, sizeof(D));
++    return d;
++}
++
+ // Translate from a value type T to its corresponding Mask, the result of a comparison.
+ template <typename T> struct Mask { using type = T; };
+ template <> struct Mask<float > { using type = int32_t; };
+@@ -554,9 +563,9 @@ static inline Vec<N,uint8_t> approx_scal
+         static inline Vec<4,float> if_then_else(const Vec<4,int  >& c,
+                                                 const Vec<4,float>& t,
+                                                 const Vec<4,float>& e) {
+-            return bit_pun<Vec<4,float>>(vbslq_f32(bit_pun<uint32x4_t> (c),
+-                                                   bit_pun<float32x4_t>(t),
+-                                                   bit_pun<float32x4_t>(e)));
++            return bit_pun<Vec<4,float>>(vbslq_f32(bit_pun2<uint32x4_t> (c),
++                                                   bit_pun2<float32x4_t>(t),
++                                                   bit_pun2<float32x4_t>(e)));
+         }
+     #endif
+ 
+@@ -581,9 +590,9 @@ static inline Vec<N,uint8_t> approx_scal
+                                        const Vec<4,float>& y,
+                                        const Vec<4,float>& z) {
+             // These instructions tend to work like z += xy, so the order here is z,x,y.
+-            return bit_pun<Vec<4,float>>(vfmaq_f32(bit_pun<float32x4_t>(z),
+-                                                   bit_pun<float32x4_t>(x),
+-                                                   bit_pun<float32x4_t>(y)));
++            return bit_pun<Vec<4,float>>(vfmaq_f32(bit_pun2<float32x4_t>(z),
++                                                   bit_pun2<float32x4_t>(x),
++                                                   bit_pun2<float32x4_t>(y)));
+         }
+     #endif
+ 

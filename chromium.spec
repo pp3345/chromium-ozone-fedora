@@ -166,8 +166,8 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4103.97
-Release:	6%{?dist}
+Version:	%{majorversion}.0.4103.106
+Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -269,7 +269,8 @@ Patch88:	chromium-83-gcc-ozone-wayland.patch
 Patch90:	chromium-83-gcc-compatibility.patch
 # Fix skia's handling of no_sanitize attributes to work with gcc
 Patch91:	chromium-83.0.4103.97-skia-gcc-no_sanitize-fixes.patch
-
+# Work around aarch64 gcc bug (PR95726)
+Patch92:	chromium-83.0.4103.97-gcc10-aarch64-hack.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -853,6 +854,7 @@ udev.
 %patch88 -p1 -b .gcc-ozone-wayland
 %patch90 -p1 -b .gcc-compatibility
 %patch91 -p1 -b .gcc-no_sanitize
+%patch92 -p1 -b .gcc10-aarch64-hack
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1810,8 +1812,10 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
-* Wed Jun 17 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-6
-- revert last change, I already had it.
+* Thu Jun 18 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.106-1
+- update to 83.0.4103.106
+- remove duplicate ServiceWorker fix
+- add fix to work around gcc bug on aarch64
 
 * Tue Jun 16 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-5
 - add ServiceWorker fix
