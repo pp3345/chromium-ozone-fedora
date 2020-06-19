@@ -1,7 +1,3 @@
-# This package depends on automagic byte compilation
-# https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_2
-%global _python_bytecompile_extra 1
-
 # Fancy build status, so we at least know, where we are..
 # %1 where
 # %2 what
@@ -1816,6 +1812,7 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 - update to 83.0.4103.106
 - remove duplicate ServiceWorker fix
 - add fix to work around gcc bug on aarch64
+- disable python byte compiling (we do not need it)
 
 * Tue Jun 16 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.97-5
 - add ServiceWorker fix
