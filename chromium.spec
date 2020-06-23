@@ -162,7 +162,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4103.106
+Version:	%{majorversion}.0.4103.116
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -1808,6 +1808,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Jun 23 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.116-1
+- update to 83.0.4103.116
+
 * Thu Jun 18 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.106-1
 - update to 83.0.4103.106
 - remove duplicate ServiceWorker fix
