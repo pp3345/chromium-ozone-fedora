@@ -163,7 +163,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4103.116
-Release:	1%{?dist}
+Release:	2%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -994,7 +994,6 @@ CHROMIUM_BROWSER_GN_DEFINES+=' is_component_ffmpeg=false is_component_build=fals
 CHROMIUM_BROWSER_GN_DEFINES+=' blink_symbol_level=0 enable_hangout_services_extension=true'
 CHROMIUM_BROWSER_GN_DEFINES+=' use_aura=true'
 CHROMIUM_BROWSER_GN_DEFINES+=' enable_widevine=true'
-CHROMIUM_BROWSER_GN_DEFINES+=' ozone_platform="x11" ozone_platform_x11=true'
 %if %{use_vaapi}
 %if 0%{?fedora} >= 28
 CHROMIUM_BROWSER_GN_DEFINES+=' use_vaapi=true'
@@ -1808,6 +1807,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Jun 23 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.116-2
+- do not force ozone into x11
+
 * Tue Jun 23 2020 Tom Callaway <spot@fedoraproject.org> - 83.0.4103.116-1
 - update to 83.0.4103.116
 
