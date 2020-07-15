@@ -1,6 +1,6 @@
-diff -up chromium-83.0.4103.97/chrome/service/cloud_print/print_system_cups.cc.el7cups chromium-83.0.4103.97/chrome/service/cloud_print/print_system_cups.cc
---- chromium-83.0.4103.97/chrome/service/cloud_print/print_system_cups.cc.el7cups	2020-06-15 10:38:45.195693757 -0400
-+++ chromium-83.0.4103.97/chrome/service/cloud_print/print_system_cups.cc	2020-06-15 10:40:19.864635638 -0400
+diff -up chromium-84.0.4147.89/chrome/service/cloud_print/print_system_cups.cc.el7cups chromium-84.0.4147.89/chrome/service/cloud_print/print_system_cups.cc
+--- chromium-84.0.4147.89/chrome/service/cloud_print/print_system_cups.cc.el7cups	2020-07-13 14:41:23.000000000 -0400
++++ chromium-84.0.4147.89/chrome/service/cloud_print/print_system_cups.cc	2020-07-15 10:16:30.482337332 -0400
 @@ -725,8 +725,9 @@ int PrintSystemCUPS::PrintFile(const GUR
    // Use default (local) print server.
    if (url.is_empty())
@@ -23,10 +23,10 @@ diff -up chromium-83.0.4103.97/chrome/service/cloud_print/print_system_cups.cc.e
    return cupsGetJobs2(http.http(), jobs, name, myjobs, whichjobs);
  }
  
-diff -up chromium-83.0.4103.97/printing/backend/cups_helper.cc.el7cups chromium-83.0.4103.97/printing/backend/cups_helper.cc
---- chromium-83.0.4103.97/printing/backend/cups_helper.cc.el7cups	2020-06-15 10:41:01.848722898 -0400
-+++ chromium-83.0.4103.97/printing/backend/cups_helper.cc	2020-06-16 09:17:08.791872797 -0400
-@@ -32,18 +32,6 @@ namespace printing {
+diff -up chromium-84.0.4147.89/printing/backend/cups_helper.cc.el7cups chromium-84.0.4147.89/printing/backend/cups_helper.cc
+--- chromium-84.0.4147.89/printing/backend/cups_helper.cc.el7cups	2020-07-13 14:41:27.000000000 -0400
++++ chromium-84.0.4147.89/printing/backend/cups_helper.cc	2020-07-15 10:17:37.551296816 -0400
+@@ -33,18 +33,6 @@ namespace printing {
  // This section contains helper code for PPD parsing for semantic capabilities.
  namespace {
  
@@ -42,10 +42,10 @@ diff -up chromium-83.0.4103.97/printing/backend/cups_helper.cc.el7cups chromium-
 -// able to start and respond on all systems within this duration.
 -constexpr base::TimeDelta kCupsTimeout = base::TimeDelta::FromSeconds(5);
 -
- // CUPS default max copies value (taken from default cupsMaxCopies parsing in
- // cups/ppd-cache.c).
+ // CUPS default max copies value (parsed from kCupsMaxCopies PPD attribute).
  constexpr int32_t kDefaultMaxCopies = 9999;
-@@ -541,8 +529,7 @@ const int kDefaultIPPServerPort = 631;
+ constexpr char kCupsMaxCopies[] = "cupsMaxCopies";
+@@ -552,8 +540,7 @@ const int kDefaultIPPServerPort = 631;
  // Helper wrapper around http_t structure, with connection and cleanup
  // functionality.
  HttpConnectionCUPS::HttpConnectionCUPS(const GURL& print_server_url,
@@ -55,7 +55,7 @@ diff -up chromium-83.0.4103.97/printing/backend/cups_helper.cc.el7cups chromium-
      : http_(nullptr) {
    // If we have an empty url, use default print server.
    if (print_server_url.is_empty())
-@@ -552,17 +539,10 @@ HttpConnectionCUPS::HttpConnectionCUPS(c
+@@ -563,17 +550,10 @@ HttpConnectionCUPS::HttpConnectionCUPS(c
    if (port == url::PORT_UNSPECIFIED)
      port = kDefaultIPPServerPort;
  
@@ -77,7 +77,7 @@ diff -up chromium-83.0.4103.97/printing/backend/cups_helper.cc.el7cups chromium-
  
    if (!http_) {
      LOG(ERROR) << "CP_CUPS: Failed connecting to print server: "
-@@ -570,8 +550,6 @@ HttpConnectionCUPS::HttpConnectionCUPS(c
+@@ -581,8 +561,6 @@ HttpConnectionCUPS::HttpConnectionCUPS(c
      return;
    }
  
@@ -86,7 +86,7 @@ diff -up chromium-83.0.4103.97/printing/backend/cups_helper.cc.el7cups chromium-
  }
  
  HttpConnectionCUPS::~HttpConnectionCUPS() {
-@@ -579,6 +557,10 @@ HttpConnectionCUPS::~HttpConnectionCUPS(
+@@ -590,6 +568,10 @@ HttpConnectionCUPS::~HttpConnectionCUPS(
      httpClose(http_);
  }
  
@@ -97,9 +97,9 @@ diff -up chromium-83.0.4103.97/printing/backend/cups_helper.cc.el7cups chromium-
  http_t* HttpConnectionCUPS::http() {
    return http_;
  }
-diff -up chromium-83.0.4103.97/printing/backend/cups_helper.h.el7cups chromium-83.0.4103.97/printing/backend/cups_helper.h
---- chromium-83.0.4103.97/printing/backend/cups_helper.h.el7cups	2020-06-15 10:44:04.949745308 -0400
-+++ chromium-83.0.4103.97/printing/backend/cups_helper.h	2020-06-15 10:44:36.653057318 -0400
+diff -up chromium-84.0.4147.89/printing/backend/cups_helper.h.el7cups chromium-84.0.4147.89/printing/backend/cups_helper.h
+--- chromium-84.0.4147.89/printing/backend/cups_helper.h.el7cups	2020-07-13 14:41:27.000000000 -0400
++++ chromium-84.0.4147.89/printing/backend/cups_helper.h	2020-07-15 10:16:30.486337271 -0400
 @@ -23,10 +23,11 @@ struct PrinterSemanticCapsAndDefaults;
  class PRINTING_EXPORT HttpConnectionCUPS {
   public:
@@ -114,9 +114,9 @@ diff -up chromium-83.0.4103.97/printing/backend/cups_helper.h.el7cups chromium-8
    http_t* http();
  
   private:
-diff -up chromium-83.0.4103.97/printing/backend/print_backend_cups.cc.el7cups chromium-83.0.4103.97/printing/backend/print_backend_cups.cc
---- chromium-83.0.4103.97/printing/backend/print_backend_cups.cc.el7cups	2020-06-15 10:44:51.203741555 -0400
-+++ chromium-83.0.4103.97/printing/backend/print_backend_cups.cc	2020-06-15 10:46:23.442739884 -0400
+diff -up chromium-84.0.4147.89/printing/backend/print_backend_cups.cc.el7cups chromium-84.0.4147.89/printing/backend/print_backend_cups.cc
+--- chromium-84.0.4147.89/printing/backend/print_backend_cups.cc.el7cups	2020-07-13 14:41:27.000000000 -0400
++++ chromium-84.0.4147.89/printing/backend/print_backend_cups.cc	2020-07-15 10:16:30.487337255 -0400
 @@ -250,7 +250,8 @@ int PrintBackendCUPS::GetDests(cups_dest
    if (print_server_url_.is_empty())
      return cupsGetDests2(CUPS_HTTP_DEFAULT, dests);

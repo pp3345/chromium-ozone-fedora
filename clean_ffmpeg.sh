@@ -88,7 +88,6 @@ header_files="	libavcodec/x86/inline_asm.h \
 		libavcodec/h263dsp.h \
 		libavcodec/h264chroma.h \
 		libavcodec/hpeldsp.h \
-		libavcodec/hwaccel.h \
 		libavcodec/hwaccels.h \
 		libavcodec/idctdsp.h \
 		libavcodec/internal.h \

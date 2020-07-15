@@ -1,14 +1,3 @@
-diff -up chromium-80.0.3987.106/third_party/webrtc/call/rtx_receive_stream.h.missing-cstdint chromium-80.0.3987.106/third_party/webrtc/call/rtx_receive_stream.h
---- chromium-80.0.3987.106/third_party/webrtc/call/rtx_receive_stream.h.missing-cstdint	2020-02-21 12:30:30.739332871 -0500
-+++ chromium-80.0.3987.106/third_party/webrtc/call/rtx_receive_stream.h	2020-02-21 12:30:30.747332725 -0500
-@@ -11,6 +11,7 @@
- #ifndef CALL_RTX_RECEIVE_STREAM_H_
- #define CALL_RTX_RECEIVE_STREAM_H_
- 
-+#include <cstdint>
- #include <map>
- 
- #include "call/rtp_packet_sink_interface.h"
 diff -up chromium-80.0.3987.106/third_party/webrtc/common_video/h264/pps_parser.h.missing-cstdint chromium-80.0.3987.106/third_party/webrtc/common_video/h264/pps_parser.h
 --- chromium-80.0.3987.106/third_party/webrtc/common_video/h264/pps_parser.h.missing-cstdint	2020-02-21 12:30:31.564317903 -0500
 +++ chromium-80.0.3987.106/third_party/webrtc/common_video/h264/pps_parser.h	2020-02-21 12:30:31.561317957 -0500

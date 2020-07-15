@@ -19,5 +19,5 @@ diff -up chromium-83.0.4103.97/media/gpu/vaapi/BUILD.gn.i686permissive chromium-
 +  configs += [ ":vaapi_permissive" ]
 +
    if (use_x11) {
-     configs += [ "//build/config/linux:x11" ]
      deps += [ "//ui/gfx/x" ]
+     sources += [
