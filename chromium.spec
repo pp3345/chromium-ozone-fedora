@@ -994,7 +994,7 @@ CHROMIUM_CORE_GN_DEFINES+=' ffmpeg_branding="ChromeOS" proprietary_codecs=true'
 %else
 CHROMIUM_CORE_GN_DEFINES+=' ffmpeg_branding="Chromium" proprietary_codecs=false'
 %endif
-CHROMIUM_CORE_GN_DEFINES+=' treat_warnings_as_errors=false linux_use_bundled_binutils=false'
+CHROMIUM_CORE_GN_DEFINES+=' treat_warnings_as_errors=false'
 CHROMIUM_CORE_GN_DEFINES+=' use_custom_libcxx=false'
 CHROMIUM_CORE_GN_DEFINES+=' use_kerberos=true'
 %ifarch aarch64
@@ -1034,7 +1034,7 @@ CHROMIUM_HEADLESS_GN_DEFINES+=' use_ozone=true ozone_auto_platforms=false ozone_
 CHROMIUM_HEADLESS_GN_DEFINES+=' headless_use_embedded_resources=true icu_use_data_file=false v8_use_external_startup_data=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' enable_nacl=false enable_print_preview=false enable_remoting=false use_alsa=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' use_cups=false use_dbus=false use_gio=false use_kerberos=false use_libpci=false'
-CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false'
+CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false use_x11=true'
 export CHROMIUM_HEADLESS_GN_DEFINES
 
 %if 0%{?rhel} == 7
