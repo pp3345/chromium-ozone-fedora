@@ -1034,7 +1034,7 @@ CHROMIUM_HEADLESS_GN_DEFINES+=' use_ozone=true ozone_auto_platforms=false ozone_
 CHROMIUM_HEADLESS_GN_DEFINES+=' headless_use_embedded_resources=true icu_use_data_file=false v8_use_external_startup_data=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' enable_nacl=false enable_print_preview=false enable_remoting=false use_alsa=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' use_cups=false use_dbus=false use_gio=false use_kerberos=false use_libpci=false'
-CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false use_x11=true'
+CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false use_atk=false'
 export CHROMIUM_HEADLESS_GN_DEFINES
 
 %if 0%{?rhel} == 7
