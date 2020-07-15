@@ -878,7 +878,7 @@ udev.
 
 # Fedora branded user agent
 %if 0%{?fedora}
-%patch13 -p1 -b .fedora-user-agent
+%patch12 -p1 -b .fedora-user-agent
 %endif
 
 # EPEL specific patches
