@@ -340,6 +340,8 @@ Source18:	GardinerModCat.ttf
 %if 0%{?rhel} == 7
 Source19:	https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.gz
 %endif
+# Bring xcb-proto with us (might need more than python on EPEL?)
+Source20:	https://www.x.org/releases/individual/proto/xcb-proto-1.14.tar.xz
 
 # We can assume gcc and binutils.
 BuildRequires:	gcc-c++
@@ -1407,6 +1409,9 @@ sed -i.orig -e 's/getenv("CHROME_VERSION_EXTRA")/"Fedora Project"/' $FILE
 # Turning the buildsystem up to 11.
 ulimit -n 4096
 
+# unpack a local copy of the xcb-proto bits
+tar xf %{SOURCE20}
+
 %if 0%{?rhel} == 7
 . /opt/rh/devtoolset-%{dts_version}/enable
 %endif
@@ -1416,7 +1421,7 @@ ulimit -n 4096
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
 %endif
 
-export PYTHONPATH="../../third_party/pyjson5/src:../../third_party/catapult/third_party/google-endpoints"
+export PYTHONPATH="../../third_party/pyjson5/src:../../third_party/catapult/third_party/google-endpoints:../../xcb-proto-1.14"
 
 echo
 # Now do the full browser
