@@ -375,6 +375,7 @@ BuildRequires:	libusb-devel
 BuildRequires:	libXdamage-devel
 BuildRequires:	libXScrnSaver-devel
 BuildRequires:	libXtst-devel
+BuildRequires:	xcb-proto
 BuildRequires:	mesa-libgbm-devel
 # Old Fedora (before 30) uses the 1.2 minizip by default.
 # Newer Fedora needs to use the compat package
