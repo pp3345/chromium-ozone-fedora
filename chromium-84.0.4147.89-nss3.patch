@@ -1,0 +1,12 @@
+diff -up chromium-84.0.4147.89/crypto/scoped_nss_types.h.nss3 chromium-84.0.4147.89/crypto/scoped_nss_types.h
+--- chromium-84.0.4147.89/crypto/scoped_nss_types.h.nss3	2020-07-15 17:18:08.086512250 -0400
++++ chromium-84.0.4147.89/crypto/scoped_nss_types.h	2020-07-15 17:18:15.980396748 -0400
+@@ -7,7 +7,7 @@
+ 
+ #include <keyhi.h>
+ #include <nss.h>
+-#include <nss/certt.h>
++#include <nss3/certt.h>
+ #include <pk11pub.h>
+ #include <plarena.h>
+ 

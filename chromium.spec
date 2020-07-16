@@ -205,6 +205,9 @@ Patch10:	chromium-79.0.3945.56-widevine-other-locations.patch
 Patch11:	chromium-71.0.3578.98-py2-bootstrap.patch
 # Add "Fedora" to the user agent string
 Patch12:	chromium-79.0.3945.56-fedora-user-agent.patch
+# Find nss include files under nss3
+Patch13:	chromium-84.0.4147.89-nss3.patch
+
 # rename function to avoid conflict with rawhide glibc "gettid()"
 Patch50:	chromium-75.0.3770.80-grpc-gettid-fix.patch
 # Needs to be submitted..
@@ -835,6 +838,7 @@ udev.
 %patch9 -p1 -b .gcc9
 %patch10 -p1 -b .widevine-other-locations
 %patch11 -p1 -b .py2
+%patch13 -p1 -b .nss3
 
 # Short term fixes (usually gcc and backports)
 %patch50 -p1 -b .gettid-fix
@@ -1034,7 +1038,7 @@ CHROMIUM_HEADLESS_GN_DEFINES+=' use_ozone=true ozone_auto_platforms=false ozone_
 CHROMIUM_HEADLESS_GN_DEFINES+=' headless_use_embedded_resources=true icu_use_data_file=false v8_use_external_startup_data=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' enable_nacl=false enable_print_preview=false enable_remoting=false use_alsa=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' use_cups=false use_dbus=false use_gio=false use_kerberos=false use_libpci=false'
-CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false use_atk=false'
+CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false use_glib=false'
 export CHROMIUM_HEADLESS_GN_DEFINES
 
 %if 0%{?rhel} == 7
