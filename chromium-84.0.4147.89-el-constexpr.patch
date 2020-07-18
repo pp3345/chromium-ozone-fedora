@@ -1,3 +1,24 @@
+diff -up chromium-84.0.4147.89/base/check_op.cc.el-constexpr chromium-84.0.4147.89/base/check_op.cc
+--- chromium-84.0.4147.89/base/check_op.cc.el-constexpr	2020-07-18 10:24:00.158000206 -0400
++++ chromium-84.0.4147.89/base/check_op.cc	2020-07-18 10:25:01.205030453 -0400
+@@ -18,7 +18,7 @@
+ 
+ namespace logging {
+ 
+-char* CheckOpValueStr(int v) {
++constexpr char* CheckOpValueStr(int v) {
+   char buf[50];
+   snprintf(buf, sizeof(buf), "%d", v);
+   return strdup(buf);
+@@ -77,7 +77,7 @@ char* StreamValToStr(const void* v,
+   return strdup(ss.str().c_str());
+ }
+ 
+-CheckOpResult::CheckOpResult(const char* expr_str, char* v1_str, char* v2_str) {
++constexpr CheckOpResult::CheckOpResult(const char* expr_str, char* v1_str, char* v2_str) {
+   std::ostringstream ss;
+   ss << expr_str << " (" << v1_str << " vs. " << v2_str << ")";
+   message_ = strdup(ss.str().c_str());
 diff -up chromium-84.0.4147.89/base/check_op.h.el-constexpr chromium-84.0.4147.89/base/check_op.h
 --- chromium-84.0.4147.89/base/check_op.h.el-constexpr	2020-07-18 09:38:18.700433097 -0400
 +++ chromium-84.0.4147.89/base/check_op.h	2020-07-18 09:59:00.620767263 -0400
