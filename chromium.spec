@@ -871,9 +871,7 @@ udev.
 %patch70 -p1 -b .AXObject-stl-iterator
 %patch71 -p1 -b .blink-disable-clang-format
 %patch72 -p1 -b .crashpad-include-cstring
-%if 0%{?fedora}
 %patch73 -p1 -b .FilePath-add-noexcept
-%endif
 %patch74 -p1 -b .fix-decltype
 %patch75 -p1 -b .flat_map-flat_tree-add-noexcept
 %patch76 -p1 -b .gcc-DCHECK_EQ-unique-ptr
