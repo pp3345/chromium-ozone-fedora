@@ -1,42 +1,13 @@
 diff -up chromium-84.0.4147.89/base/check_op.cc.el-constexpr chromium-84.0.4147.89/base/check_op.cc
---- chromium-84.0.4147.89/base/check_op.cc.el-constexpr	2020-07-18 10:24:00.158000206 -0400
-+++ chromium-84.0.4147.89/base/check_op.cc	2020-07-18 10:25:01.205030453 -0400
-@@ -18,7 +18,7 @@
- 
- namespace logging {
- 
--char* CheckOpValueStr(int v) {
-+constexpr char* CheckOpValueStr(int v) {
-   char buf[50];
-   snprintf(buf, sizeof(buf), "%d", v);
-   return strdup(buf);
-@@ -77,7 +77,7 @@ char* StreamValToStr(const void* v,
-   return strdup(ss.str().c_str());
- }
- 
--CheckOpResult::CheckOpResult(const char* expr_str, char* v1_str, char* v2_str) {
-+constexpr CheckOpResult::CheckOpResult(const char* expr_str, char* v1_str, char* v2_str) {
-   std::ostringstream ss;
-   ss << expr_str << " (" << v1_str << " vs. " << v2_str << ")";
-   message_ = strdup(ss.str().c_str());
 diff -up chromium-84.0.4147.89/base/check_op.h.el-constexpr chromium-84.0.4147.89/base/check_op.h
 --- chromium-84.0.4147.89/base/check_op.h.el-constexpr	2020-07-18 09:38:18.700433097 -0400
-+++ chromium-84.0.4147.89/base/check_op.h	2020-07-18 09:59:00.620767263 -0400
-@@ -33,7 +33,7 @@ namespace logging {
- 
- // Functions for turning check operand values into strings.
- // Caller takes ownership of the returned string.
--BASE_EXPORT char* CheckOpValueStr(int v);
-+BASE_EXPORT constexpr char* CheckOpValueStr(int v);
- BASE_EXPORT char* CheckOpValueStr(unsigned v);
- BASE_EXPORT char* CheckOpValueStr(long v);
- BASE_EXPORT char* CheckOpValueStr(unsigned long v);
-@@ -124,7 +124,7 @@ class CheckOpResult {
-   // A non-success result. expr_str is something like "foo != bar". v1_str and
-   // v2_str are the stringified run-time values of foo and bar. Takes ownership
-   // of v1_str and v2_str.
--  BASE_EXPORT CheckOpResult(const char* expr_str, char* v1_str, char* v2_str);
-+  BASE_EXPORT constexpr CheckOpResult(const char* expr_str, char* v1_str, char* v2_str);
- 
-   // Returns true if the check succeeded.
-   constexpr explicit operator bool() const { return !message_; }
++++ chromium-84.0.4147.89/base/check_op.h	2020-07-18 10:51:04.086854722 -0400
+@@ -171,7 +171,7 @@ class CheckOpResult {
+     return ::logging::CheckOpResult(expr_str, CheckOpValueStr(v1),             \
+                                     CheckOpValueStr(v2));                      \
+   }                                                                            \
+-  constexpr ::logging::CheckOpResult Check##name##Impl(int v1, int v2,         \
++  ::logging::CheckOpResult Check##name##Impl(int v1, int v2,                   \
+                                                        const char* expr_str) { \
+     if (ANALYZER_ASSUME_TRUE(v1 op v2))                                        \
+       return ::logging::CheckOpResult();                                       \
