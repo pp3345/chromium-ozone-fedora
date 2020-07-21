@@ -894,13 +894,14 @@ udev.
 
 # EPEL specific patches
 %if 0%{?rhel} == 7
-%patch101 -p1 -b .epel7
-%patch102 -p1 -b .el7-noexcept
+# %%patch101 -p1 -b .epel7
+# %%patch102 -p1 -b .el7-noexcept
 %patch103 -p1 -b .epel7-kcmp
 %patch104 -p1 -b .el7cups
 %endif
 
-%if 0%{?rhel} == 7 || 0%{?rhel} == 8
+# %%if 0%%{?rhel} == 7 || 0%%{?rhel} == 8
+%if 0%{?rhel} == 8
 %patch105 -p1 -b .el-constexpr
 %endif
 
