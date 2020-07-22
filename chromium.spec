@@ -107,7 +107,7 @@ BuildRequires:  libicu-devel >= 5.4
 # Hopefully it does not anymore.
 %global gtk3 1
 
-%if 0%{?rhel} == 7
+%if 0%{?rhel} == 7 || 0%{?rhel} == 8
 %global dts_version 9
 
 %global bundleopus 1
@@ -566,6 +566,13 @@ BuildRequires:	java-1.8.0-openjdk-headless
 BuildRequires: devtoolset-%{dts_version}-toolchain, devtoolset-%{dts_version}-libatomic-devel
 %endif
 
+# We need to workaround a gcc 8 bug
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94929
+# https://bugs.gentoo.org/726604
+%if 0%{?rhel} == 8
+BuildRequires: gcc-toolset-%{dts_version}
+%endif
+
 # There is a hardcoded check for nss 3.26 in the chromium code (crypto/nss_util.cc)
 Requires:	nss%{_isa} >= 3.26
 Requires:	nss-mdns%{_isa}
@@ -903,9 +910,10 @@ udev.
 %patch106 -p1 -b .el-clang
 %endif
 
-# %%if 0%%{?rhel} == 7 || 0%%{?rhel} == 8
+%if 0
 %if 0%{?rhel} == 8
 %patch105 -p1 -b .el-constexpr
+%endif
 %endif
 
 # Feature specific patches
@@ -1383,6 +1391,10 @@ sed -i 's|exec "${THIS_DIR}/ninja-linux${LONG_BIT}"|exec "/usr/bin/ninja-build"|
 . /opt/rh/devtoolset-%{dts_version}/enable
 %endif
 
+%if 0%{?rhel} == 8
+. /opt/rh/gcc-toolset-%{dts_version}/enable
+%endif
+
 # Check that there is no system 'google' module, shadowing bundled ones:
 if python2 -c 'import google ; print google.__path__' 2> /dev/null ; then \
     echo "Python 2 'google' module is defined, this will shadow modules of this build"; \
@@ -1426,6 +1438,10 @@ tar xf %{SOURCE20}
 
 %if 0%{?rhel} == 7
 . /opt/rh/devtoolset-%{dts_version}/enable
+%endif
+
+%if 0%{?rhel} == 8
+. /opt/rh/gcc-toolset-%{dts_version}/enable
 %endif
 
 # Decrease the debuginfo verbosity, so it compiles in koji
