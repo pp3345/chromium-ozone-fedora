@@ -30,3 +30,65 @@ diff -up chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctfs
  
    /* Transpose block ready for store. */
    uint32x4x2_t cols_0415 = vzipq_u32(vreinterpretq_u32_u8(cols_01),
+diff -up chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c.arm-incompatible-ints chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c
+--- chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c.arm-incompatible-ints	2020-07-22 16:28:13.318222388 -0400
++++ chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c	2020-07-22 16:32:39.578126196 -0400
+@@ -214,13 +214,13 @@ void jsimd_idct_islow_neon(void *dct_tab
+   int16x4_t bitmap = vorr_s16(row7, row6);
+   bitmap = vorr_s16(bitmap, row5);
+   bitmap = vorr_s16(bitmap, row4);
+-  int64_t bitmap_rows_4567 = vreinterpret_s64_s16(bitmap);
++  int64x1_t bitmap_rows_4567 = vreinterpret_s64_s16(bitmap);
+ 
+   if (bitmap_rows_4567 == 0) {
+     bitmap = vorr_s16(bitmap, row3);
+     bitmap = vorr_s16(bitmap, row2);
+     bitmap = vorr_s16(bitmap, row1);
+-    int64_t left_ac_bitmap = vreinterpret_s64_s16(bitmap);
++    int64x1_t left_ac_bitmap = vreinterpret_s64_s16(bitmap);
+ 
+     if (left_ac_bitmap == 0) {
+       int16x4_t dcval = vshl_n_s16(vmul_s16(row0, quant_row0), PASS1_BITS);
+@@ -270,10 +270,10 @@ void jsimd_idct_islow_neon(void *dct_tab
+   bitmap = vorr_s16(bitmap, row3);
+   bitmap = vorr_s16(bitmap, row2);
+   bitmap = vorr_s16(bitmap, row1);
+-  int64_t right_ac_bitmap = vreinterpret_s64_s16(bitmap);
++  int64x1_t right_ac_bitmap = vreinterpret_s64_s16(bitmap);
+ 
+   /* Initialise to non-zero value: defaults to regular second pass. */
+-  int64_t right_ac_dc_bitmap = 1;
++  int64x1_t right_ac_dc_bitmap = 1;
+ 
+   if (right_ac_bitmap == 0) {
+     bitmap = vorr_s16(bitmap, row0);
+@@ -630,10 +630,10 @@ static inline void jsimd_idct_islow_pass
+   int8x8_t cols_46_s8 = vqrshrn_n_s16(cols_46_s16, DESCALE_P2 - 16);
+   int8x8_t cols_57_s8 = vqrshrn_n_s16(cols_57_s16, DESCALE_P2 - 16);
+   /* Clamp to range [0-255]. */
+-  uint8x8_t cols_02_u8 = vadd_u8(cols_02_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_13_u8 = vadd_u8(cols_13_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_46_u8 = vadd_u8(cols_46_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_57_u8 = vadd_u8(cols_57_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_02_u8 = vadd_u8((uint8x8_t)cols_02_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_13_u8 = vadd_u8((uint8x8_t)cols_13_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_46_u8 = vadd_u8((uint8x8_t)cols_46_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_57_u8 = vadd_u8((uint8x8_t)cols_57_s8, vdup_n_u8(CENTERJSAMPLE));
+ 
+   /* Transpose 4x8 block and store to memory. */
+   /* Zipping adjacent columns together allows us to store 16-bit elements. */
+@@ -722,10 +722,10 @@ static inline void jsimd_idct_islow_pass
+   int8x8_t cols_46_s8 = vqrshrn_n_s16(cols_46_s16, DESCALE_P2 - 16);
+   int8x8_t cols_57_s8 = vqrshrn_n_s16(cols_57_s16, DESCALE_P2 - 16);
+   /* Clamp to range [0-255]. */
+-  uint8x8_t cols_02_u8 = vadd_u8(cols_02_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_13_u8 = vadd_u8(cols_13_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_46_u8 = vadd_u8(cols_46_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_57_u8 = vadd_u8(cols_57_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_02_u8 = vadd_u8((uint8x8_t)cols_02_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_13_u8 = vadd_u8((uint8x8_t)cols_13_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_46_u8 = vadd_u8((uint8x8_t)cols_46_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_57_u8 = vadd_u8((uint8x8_t)cols_57_s8, vdup_n_u8(CENTERJSAMPLE));
+ 
+   /* Transpose 4x8 block and store to memory. */
+   /* Zipping adjacent columns together allow us to store 16-bit elements. */
