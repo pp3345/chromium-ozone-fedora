@@ -299,6 +299,8 @@ Patch104:	chromium-84.0.4147.89-epel7-old-cups.patch
 # ../../base/check_op.h: In function 'constexpr logging::CheckOpResult logging::CheckGTImpl(int, int, const char*)':
 # ../../base/check_op.h:180:3: error: call to non-'constexpr' function 'logging::CheckOpResult::CheckOpResult(const char*, char*, char*)'
 Patch105:	chromium-84.0.4147.89-el-constexpr.patch
+# Still not wrong, but it seems like only EL needs it
+Patch106:	chromium-77-clang.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
@@ -898,6 +900,7 @@ udev.
 # %%patch102 -p1 -b .el7-noexcept
 %patch103 -p1 -b .epel7-kcmp
 %patch104 -p1 -b .el7cups
+%patch106 -p1 -b .el-clang
 %endif
 
 # %%if 0%%{?rhel} == 7 || 0%%{?rhel} == 8
