@@ -570,7 +570,7 @@ BuildRequires: devtoolset-%{dts_version}-toolchain, devtoolset-%{dts_version}-li
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94929
 # https://bugs.gentoo.org/726604
 %if 0%{?rhel} == 8
-BuildRequires: gcc-toolset-%{dts_version}
+BuildRequires: gcc-toolset-%{dts_version}-toolchain, gcc-toolset-%{dts_version}-libatomic-devel
 %endif
 
 # There is a hardcoded check for nss 3.26 in the chromium code (crypto/nss_util.cc)
