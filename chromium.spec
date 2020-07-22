@@ -301,6 +301,10 @@ Patch104:	chromium-84.0.4147.89-epel7-old-cups.patch
 Patch105:	chromium-84.0.4147.89-el-constexpr.patch
 # Still not wrong, but it seems like only EL needs it
 Patch106:	chromium-77-clang.patch
+# ARM failures on el8 related to int clashes
+# error: incompatible types when initializing type 'int64_t' {aka 'long int'} using type 'int64x1_t'
+# note: expected 'int8x16_t' but argument is of type 'uint8x16_t'
+Patch107:	chromium-84.0.4147.89-el8-arm-incompatible-ints.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
@@ -914,6 +918,10 @@ udev.
 %if 0%{?rhel} == 8
 %patch105 -p1 -b .el-constexpr
 %endif
+%endif
+
+%if 0%{?rhel} == 8
+%patch107 -p1 -b .el8-arm-incompatible-ints
 %endif
 
 # Feature specific patches
