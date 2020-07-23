@@ -295,10 +295,6 @@ Patch103:	chromium-84.0.4147.89-epel7-no-kcmp-h.patch
 # Use old cups (chromium's code workaround breaks on gcc)
 # Revert: https://github.com/chromium/chromium/commit/c3213f8779ddc427e89d982514185ed5e4c94e91
 Patch104:	chromium-84.0.4147.89-epel7-old-cups.patch
-# Old GCC throws:
-# ../../base/check_op.h: In function 'constexpr logging::CheckOpResult logging::CheckGTImpl(int, int, const char*)':
-# ../../base/check_op.h:180:3: error: call to non-'constexpr' function 'logging::CheckOpResult::CheckOpResult(const char*, char*, char*)'
-Patch105:	chromium-84.0.4147.89-el-constexpr.patch
 # Still not wrong, but it seems like only EL needs it
 Patch106:	chromium-77-clang.patch
 # ARM failures on el8 related to int clashes
@@ -911,13 +907,10 @@ udev.
 # %%patch102 -p1 -b .el7-noexcept
 %patch103 -p1 -b .epel7-kcmp
 %patch104 -p1 -b .el7cups
-%patch106 -p1 -b .el-clang
 %endif
 
-%if 0
-%if 0%{?rhel} == 8
-%patch105 -p1 -b .el-constexpr
-%endif
+%if 0%{?rhel} == 7 || 0%{?rhel} == 8
+%patch106 -p1 -b .el-clang
 %endif
 
 %if 0%{?rhel} == 8
