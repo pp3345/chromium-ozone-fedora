@@ -1,3 +1,5 @@
+%define _lto_cflags %{nil}
+
 # Fancy build status, so we at least know, where we are..
 # %1 where
 # %2 what
