@@ -287,6 +287,8 @@ Patch85:	chromium-clang_lto_visibility_public.patch
 Patch86:	chromium-fix-char_traits.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-quiche-invalid-offsetof.patch
 Patch87:	chromium-quiche-invalid-offsetof.patch
+# Silence GCC warnings during gn compile
+Patch88:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -897,6 +899,7 @@ udev.
 %patch85 -p1 -b .clang_lto_visibility_public
 %patch86 -p1 -b .fix-char_traits
 %patch87 -p1 -b .quiche-invalid-offset
+%patch88 -p1 -b .gn-gcc-cleanup
 
 # Fedora branded user agent
 %if 0%{?fedora}
