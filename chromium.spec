@@ -16,7 +16,7 @@
 %global build_headless 1
 
 # This doesn't work and it doesn't even build as of Chromium 83
-%global build_remoting 0
+%global build_remoting 1
 
 # We'd like to always have this on.
 %global use_vaapi 1
@@ -164,8 +164,8 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4147.105
-Release:	2%{?dist}
+Version:	%{majorversion}.0.4147.125
+Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -289,6 +289,8 @@ Patch86:	chromium-fix-char_traits.patch
 Patch87:	chromium-quiche-invalid-offsetof.patch
 # Silence GCC warnings during gn compile
 Patch88:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
+# Fix missing cstring in remoting code
+Patch89:	chromium-84.0.4147.125-remoting-cstring.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -767,6 +769,13 @@ Requires: minizip-compat%{_isa}
 %else
 Requires: minizip%{_isa}
 %endif
+# -common doesn't have chrome-remote-desktop bits
+# but we need to clean it up if it gets disabled again
+# NOTE: Check obsoletes version to be sure it matches
+%if ! %{build_remoting}
+Provides: chrome-remote-desktop = %{version}-%{release}
+Obsoletes: chrome-remote-desktop <= 81.0.4044.138
+%endif
 
 %description common
 %{summary}.
@@ -900,6 +909,7 @@ udev.
 %patch86 -p1 -b .fix-char_traits
 %patch87 -p1 -b .quiche-invalid-offset
 %patch88 -p1 -b .gn-gcc-cleanup
+%patch89 -p1 -b .remoting-cstring
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1879,6 +1889,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Mon Aug 10 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-1
+- update to 84.0.4147.125
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 84.0.4147.105-2
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
