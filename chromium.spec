@@ -1602,7 +1602,8 @@ rm -rf %{buildroot}
 
 		mkdir -p %{buildroot}%{_sysconfdir}/pam.d/
 		pushd %{buildroot}%{_sysconfdir}/pam.d/
-		ln -s system-auth chrome-remote-desktop
+			ln -s system-auth chrome-remote-desktop
+		popd
 	%endif
 
 	%if %{build_headless}
