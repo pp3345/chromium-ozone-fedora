@@ -1,0 +1,192 @@
+diff -up chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctfst-neon.c.el8-arm-incompatible-ints chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctfst-neon.c
+--- chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctfst-neon.c.el8-arm-incompatible-ints	2020-07-13 14:43:44.000000000 -0400
++++ chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctfst-neon.c	2020-07-22 23:14:37.425855588 -0400
+@@ -84,8 +84,8 @@ void jsimd_idct_ifast_neon(void *dct_tab
+   bitmap = vorrq_s16(bitmap, row6);
+   bitmap = vorrq_s16(bitmap, row7);
+ 
+-  int64_t left_ac_bitmap = vreinterpret_s64_s16(vget_low_s16(bitmap));
+-  int64_t right_ac_bitmap = vreinterpret_s64_s16(vget_high_s16(bitmap));
++  int64_t left_ac_bitmap = (int64_t)vreinterpret_s64_s16(vget_low_s16(bitmap));
++  int64_t right_ac_bitmap = (int64_t)vreinterpret_s64_s16(vget_high_s16(bitmap));
+ 
+   if (left_ac_bitmap == 0 && right_ac_bitmap == 0) {
+     /* All AC coefficients are zero. */
+@@ -405,13 +405,13 @@ void jsimd_idct_ifast_neon(void *dct_tab
+                                      vqshrn_n_s16(col7, PASS1_BITS + 3));
+   /* Clamp to range [0-255]. */
+   uint8x16_t cols_01 = vreinterpretq_u8_s8(
+-                            vaddq_s8(cols_01_s8, vdupq_n_u8(CENTERJSAMPLE)));
++                            vaddq_s8(cols_01_s8, (int8x16_t)vdupq_n_u8(CENTERJSAMPLE)));
+   uint8x16_t cols_45 = vreinterpretq_u8_s8(
+-                            vaddq_s8(cols_45_s8, vdupq_n_u8(CENTERJSAMPLE)));
++                            vaddq_s8(cols_45_s8, (int8x16_t)vdupq_n_u8(CENTERJSAMPLE)));
+   uint8x16_t cols_23 = vreinterpretq_u8_s8(
+-                            vaddq_s8(cols_23_s8, vdupq_n_u8(CENTERJSAMPLE)));
++                            vaddq_s8(cols_23_s8, (int8x16_t)vdupq_n_u8(CENTERJSAMPLE)));
+   uint8x16_t cols_67 = vreinterpretq_u8_s8(
+-                            vaddq_s8(cols_67_s8, vdupq_n_u8(CENTERJSAMPLE)));
++                            vaddq_s8(cols_67_s8, (int8x16_t)vdupq_n_u8(CENTERJSAMPLE)));
+ 
+   /* Transpose block ready for store. */
+   uint32x4x2_t cols_0415 = vzipq_u32(vreinterpretq_u32_u8(cols_01),
+diff -up chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c.el8-arm-incompatible-ints chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c
+--- chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c.el8-arm-incompatible-ints	2020-07-13 14:43:44.000000000 -0400
++++ chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctint-neon.c	2020-07-22 23:33:26.502244720 -0400
+@@ -214,13 +214,13 @@ void jsimd_idct_islow_neon(void *dct_tab
+   int16x4_t bitmap = vorr_s16(row7, row6);
+   bitmap = vorr_s16(bitmap, row5);
+   bitmap = vorr_s16(bitmap, row4);
+-  int64_t bitmap_rows_4567 = vreinterpret_s64_s16(bitmap);
++  int64_t bitmap_rows_4567 = (int64_t)vreinterpret_s64_s16(bitmap);
+ 
+   if (bitmap_rows_4567 == 0) {
+     bitmap = vorr_s16(bitmap, row3);
+     bitmap = vorr_s16(bitmap, row2);
+     bitmap = vorr_s16(bitmap, row1);
+-    int64_t left_ac_bitmap = vreinterpret_s64_s16(bitmap);
++    int64_t left_ac_bitmap = (int64_t)vreinterpret_s64_s16(bitmap);
+ 
+     if (left_ac_bitmap == 0) {
+       int16x4_t dcval = vshl_n_s16(vmul_s16(row0, quant_row0), PASS1_BITS);
+@@ -266,18 +266,18 @@ void jsimd_idct_islow_neon(void *dct_tab
+   bitmap = vorr_s16(row7, row6);
+   bitmap = vorr_s16(bitmap, row5);
+   bitmap = vorr_s16(bitmap, row4);
+-  bitmap_rows_4567 = vreinterpret_s64_s16(bitmap);
++  bitmap_rows_4567 = (int64_t)vreinterpret_s64_s16(bitmap);
+   bitmap = vorr_s16(bitmap, row3);
+   bitmap = vorr_s16(bitmap, row2);
+   bitmap = vorr_s16(bitmap, row1);
+-  int64_t right_ac_bitmap = vreinterpret_s64_s16(bitmap);
++  int64_t right_ac_bitmap = (int64_t)vreinterpret_s64_s16(bitmap);
+ 
+   /* Initialise to non-zero value: defaults to regular second pass. */
+   int64_t right_ac_dc_bitmap = 1;
+ 
+   if (right_ac_bitmap == 0) {
+     bitmap = vorr_s16(bitmap, row0);
+-    right_ac_dc_bitmap = vreinterpret_s64_s16(bitmap);
++    right_ac_dc_bitmap = (int64_t)vreinterpret_s64_s16(bitmap);
+ 
+     if (right_ac_dc_bitmap != 0) {
+       int16x4_t dcval = vshl_n_s16(vmul_s16(row0, quant_row0), PASS1_BITS);
+@@ -346,7 +346,13 @@ static inline void jsimd_idct_islow_pass
+                                                   int16_t *workspace_2)
+ {
+   /* Load constants for IDCT calculation. */
++#if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
+   const int16x4x3_t consts = vld1_s16_x3(jsimd_idct_islow_neon_consts);
++#else
++  const int16x4x3_t consts = { vld1_s16(jsimd_idct_islow_neon_consts),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 4),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 8) };
++#endif
+ 
+   /* Even part. */
+   int16x4_t z2_s16 = vmul_s16(row2, quant_row2);
+@@ -463,7 +469,13 @@ static inline void jsimd_idct_islow_pass
+                                                  int16_t *workspace_2)
+ {
+   /* Load constants for IDCT computation. */
++#if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
+   const int16x4x3_t consts = vld1_s16_x3(jsimd_idct_islow_neon_consts);
++#else
++  const int16x4x3_t consts = { vld1_s16(jsimd_idct_islow_neon_consts),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 4),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 8) };
++#endif
+ 
+   /* Even part. */
+   int16x4_t z2_s16 = vmul_s16(row2, quant_row2);
+@@ -537,7 +549,13 @@ static inline void jsimd_idct_islow_pass
+                                                   unsigned buf_offset)
+ {
+   /* Load constants for IDCT computation. */
++#if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
+   const int16x4x3_t consts = vld1_s16_x3(jsimd_idct_islow_neon_consts);
++#else
++  const int16x4x3_t consts = { vld1_s16(jsimd_idct_islow_neon_consts),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 4),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 8) };
++#endif
+ 
+   /* Even part. */
+   int16x4_t z2_s16 = vld1_s16(workspace + 2 * DCTSIZE / 2);
+@@ -630,10 +648,10 @@ static inline void jsimd_idct_islow_pass
+   int8x8_t cols_46_s8 = vqrshrn_n_s16(cols_46_s16, DESCALE_P2 - 16);
+   int8x8_t cols_57_s8 = vqrshrn_n_s16(cols_57_s16, DESCALE_P2 - 16);
+   /* Clamp to range [0-255]. */
+-  uint8x8_t cols_02_u8 = vadd_u8(cols_02_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_13_u8 = vadd_u8(cols_13_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_46_u8 = vadd_u8(cols_46_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_57_u8 = vadd_u8(cols_57_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_02_u8 = vadd_u8(vreinterpret_u8_s8(cols_02_s8), vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_13_u8 = vadd_u8(vreinterpret_u8_s8(cols_13_s8), vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_46_u8 = vadd_u8(vreinterpret_u8_s8(cols_46_s8), vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_57_u8 = vadd_u8(vreinterpret_u8_s8(cols_57_s8), vdup_n_u8(CENTERJSAMPLE));
+ 
+   /* Transpose 4x8 block and store to memory. */
+   /* Zipping adjacent columns together allows us to store 16-bit elements. */
+@@ -671,7 +689,13 @@ static inline void jsimd_idct_islow_pass
+                                                  unsigned buf_offset)
+ {
+   /* Load constants for IDCT computation. */
++#if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
+   const int16x4x3_t consts = vld1_s16_x3(jsimd_idct_islow_neon_consts);
++#else
++  const int16x4x3_t consts = { vld1_s16(jsimd_idct_islow_neon_consts),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 4),
++                               vld1_s16(jsimd_idct_islow_neon_consts + 8) };
++#endif
+ 
+   /* Even part. */
+   int16x4_t z2_s16 = vld1_s16(workspace + 2 * DCTSIZE / 2);
+@@ -722,10 +746,10 @@ static inline void jsimd_idct_islow_pass
+   int8x8_t cols_46_s8 = vqrshrn_n_s16(cols_46_s16, DESCALE_P2 - 16);
+   int8x8_t cols_57_s8 = vqrshrn_n_s16(cols_57_s16, DESCALE_P2 - 16);
+   /* Clamp to range [0-255]. */
+-  uint8x8_t cols_02_u8 = vadd_u8(cols_02_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_13_u8 = vadd_u8(cols_13_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_46_u8 = vadd_u8(cols_46_s8, vdup_n_u8(CENTERJSAMPLE));
+-  uint8x8_t cols_57_u8 = vadd_u8(cols_57_s8, vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_02_u8 = vadd_u8(vreinterpret_u8_s8(cols_02_s8), vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_13_u8 = vadd_u8(vreinterpret_u8_s8(cols_13_s8), vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_46_u8 = vadd_u8(vreinterpret_u8_s8(cols_46_s8), vdup_n_u8(CENTERJSAMPLE));
++  uint8x8_t cols_57_u8 = vadd_u8(vreinterpret_u8_s8(cols_57_s8), vdup_n_u8(CENTERJSAMPLE));
+ 
+   /* Transpose 4x8 block and store to memory. */
+   /* Zipping adjacent columns together allow us to store 16-bit elements. */
+diff -up chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctred-neon.c.el8-arm-incompatible-ints chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctred-neon.c
+--- chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctred-neon.c.el8-arm-incompatible-ints	2020-07-22 23:16:15.856337031 -0400
++++ chromium-84.0.4147.89/third_party/libjpeg_turbo/simd/arm/common/jidctred-neon.c	2020-07-22 23:28:15.154109493 -0400
+@@ -217,11 +217,17 @@ void jsimd_idct_4x4_neon(void *dct_table
+   bitmap = vorrq_s16(bitmap, row6);
+   bitmap = vorrq_s16(bitmap, row7);
+ 
+-  int64_t left_ac_bitmap = vreinterpret_s64_s16(vget_low_s16(bitmap));
+-  int64_t right_ac_bitmap = vreinterpret_s64_s16(vget_high_s16(bitmap));
++  int64_t left_ac_bitmap = (int64_t)vreinterpret_s64_s16(vget_low_s16(bitmap));
++  int64_t right_ac_bitmap = (int64_t)vreinterpret_s64_s16(vget_high_s16(bitmap));
+ 
+   /* Load constants for IDCT computation. */
++#if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
+   const int16x4x3_t consts = vld1_s16_x3(jsimd_idct_4x4_neon_consts);
++#else
++  const int16x4x3_t consts = { vld1_s16(jsimd_idct_4x4_neon_consts),
++                               vld1_s16(jsimd_idct_4x4_neon_consts + 4),
++                               vld1_s16(jsimd_idct_4x4_neon_consts + 8) };
++#endif
+ 
+   if (left_ac_bitmap == 0 && right_ac_bitmap == 0) {
+     /* All AC coefficients are zero. */
+@@ -452,7 +458,8 @@ void jsimd_idct_4x4_neon(void *dct_table
+   /* Interleaving store completes the transpose. */
+   uint8x8x2_t output_0123 = vzip_u8(vqmovun_s16(output_cols_02),
+                                     vqmovun_s16(output_cols_13));
+-  uint16x4x2_t output_01_23 = { output_0123.val[0], output_0123.val[1] };
++  uint16x4x2_t output_01_23 = { vreinterpret_u16_u8(output_0123.val[0]),
++                                vreinterpret_u16_u8(output_0123.val[1]) };
+ 
+   /* Store 4x4 block to memory. */
+   JSAMPROW outptr0 = output_buf[0] + output_col;

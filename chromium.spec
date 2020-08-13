@@ -1,3 +1,5 @@
+%define _lto_cflags %{nil}
+
 # Fancy build status, so we at least know, where we are..
 # %1 where
 # %2 what
@@ -14,7 +16,7 @@
 %global build_headless 0
 
 # This doesn't work and it doesn't even build as of Chromium 83
-%global build_remoting 0
+%global build_remoting 1
 
 # We'd like to always have this on.
 %global use_vaapi 1
@@ -107,8 +109,8 @@ BuildRequires:  libicu-devel >= 5.4
 # Hopefully it does not anymore.
 %global gtk3 1
 
-%if 0%{?rhel} == 7
-%global dts_version 8
+%if 0%{?rhel} == 7 || 0%{?rhel} == 8
+%global dts_version 9
 
 %global bundleopus 1
 %global bundlelibusbx 1
@@ -162,7 +164,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4147.89
+Version:	%{majorversion}.0.4147.125
 Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
@@ -285,6 +287,10 @@ Patch85:	chromium-clang_lto_visibility_public.patch
 Patch86:	chromium-fix-char_traits.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-quiche-invalid-offsetof.patch
 Patch87:	chromium-quiche-invalid-offsetof.patch
+# Silence GCC warnings during gn compile
+Patch88:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
+# Fix missing cstring in remoting code
+Patch89:	chromium-84.0.4147.125-remoting-cstring.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -295,6 +301,12 @@ Patch103:	chromium-84.0.4147.89-epel7-no-kcmp-h.patch
 # Use old cups (chromium's code workaround breaks on gcc)
 # Revert: https://github.com/chromium/chromium/commit/c3213f8779ddc427e89d982514185ed5e4c94e91
 Patch104:	chromium-84.0.4147.89-epel7-old-cups.patch
+# Still not wrong, but it seems like only EL needs it
+Patch106:	chromium-77-clang.patch
+# ARM failures on el8 related to int clashes
+# error: incompatible types when initializing type 'int64_t' {aka 'long int'} using type 'int64x1_t'
+# note: expected 'int8x16_t' but argument is of type 'uint8x16_t'
+Patch107:	chromium-84.0.4147.89-el8-arm-incompatible-ints.patch
 
 # Enable VAAPI support on Linux
 # NOTE: This patch will never land upstream
@@ -560,6 +572,13 @@ BuildRequires:	java-1.8.0-openjdk-headless
 BuildRequires: devtoolset-%{dts_version}-toolchain, devtoolset-%{dts_version}-libatomic-devel
 %endif
 
+# We need to workaround a gcc 8 bug
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94929
+# https://bugs.gentoo.org/726604
+%if 0%{?rhel} == 8
+BuildRequires: gcc-toolset-%{dts_version}-toolchain, gcc-toolset-%{dts_version}-libatomic-devel
+%endif
+
 # There is a hardcoded check for nss 3.26 in the chromium code (crypto/nss_util.cc)
 Requires:	nss%{_isa} >= 3.26
 Requires:	nss-mdns%{_isa}
@@ -750,6 +769,13 @@ Requires: minizip-compat%{_isa}
 %else
 Requires: minizip%{_isa}
 %endif
+# -common doesn't have chrome-remote-desktop bits
+# but we need to clean it up if it gets disabled again
+# NOTE: Check obsoletes version to be sure it matches
+%if ! %{build_remoting}
+Provides: chrome-remote-desktop = %{version}-%{release}
+Obsoletes: chrome-remote-desktop <= 81.0.4044.138
+%endif
 
 %description common
 %{summary}.
@@ -882,6 +908,8 @@ udev.
 %patch85 -p1 -b .clang_lto_visibility_public
 %patch86 -p1 -b .fix-char_traits
 %patch87 -p1 -b .quiche-invalid-offset
+%patch88 -p1 -b .gn-gcc-cleanup
+%patch89 -p1 -b .remoting-cstring
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -890,10 +918,18 @@ udev.
 
 # EPEL specific patches
 %if 0%{?rhel} == 7
-%patch101 -p1 -b .epel7
-%patch102 -p1 -b .el7-noexcept
+# %%patch101 -p1 -b .epel7
+# %%patch102 -p1 -b .el7-noexcept
 %patch103 -p1 -b .epel7-kcmp
 %patch104 -p1 -b .el7cups
+%endif
+
+%if 0%{?rhel} == 7 || 0%{?rhel} == 8
+%patch106 -p1 -b .el-clang
+%endif
+
+%if 0%{?rhel} == 8
+%patch107 -p1 -b .el8-arm-incompatible-ints
 %endif
 
 # Feature specific patches
@@ -1370,6 +1406,10 @@ sed -i 's|exec "${THIS_DIR}/ninja-linux${LONG_BIT}"|exec "/usr/bin/ninja-build"|
 . /opt/rh/devtoolset-%{dts_version}/enable
 %endif
 
+%if 0%{?rhel} == 8
+. /opt/rh/gcc-toolset-%{dts_version}/enable
+%endif
+
 # Check that there is no system 'google' module, shadowing bundled ones:
 if python2 -c 'import google ; print google.__path__' 2> /dev/null ; then \
     echo "Python 2 'google' module is defined, this will shadow modules of this build"; \
@@ -1413,6 +1453,10 @@ tar xf %{SOURCE20}
 
 %if 0%{?rhel} == 7
 . /opt/rh/devtoolset-%{dts_version}/enable
+%endif
+
+%if 0%{?rhel} == 8
+. /opt/rh/gcc-toolset-%{dts_version}/enable
 %endif
 
 # Decrease the debuginfo verbosity, so it compiles in koji
@@ -1557,7 +1601,8 @@ rm -rf %{buildroot}
 
 		mkdir -p %{buildroot}%{_sysconfdir}/pam.d/
 		pushd %{buildroot}%{_sysconfdir}/pam.d/
-		ln -s system-auth chrome-remote-desktop
+			ln -s system-auth chrome-remote-desktop
+		popd
 	%endif
 
 	%if %{build_headless}
@@ -1844,6 +1889,19 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Mon Aug 10 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-1
+- update to 84.0.4147.125
+
+* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 84.0.4147.105-2
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Fri Jul 31 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.105-1
+- update to 84.0.4147.105
+
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 84.0.4147.89-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Wed Jul 15 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.89-1
 - update to 84.0.4147.89
 
