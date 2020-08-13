@@ -1768,9 +1768,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 %{_datadir}/gnome-control-center/default-apps/chromium-browser.xml
 
 %files common
-%if %{build_headless}
+#%if %{build_headless}
 %{chromium_path}/headless_lib.pak
-%endif
+#%endif
 # %%{chromium_path}/mus_app_resources_*.pak
 %if 0
 %{chromium_path}/pyproto/
