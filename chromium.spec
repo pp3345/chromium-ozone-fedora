@@ -299,6 +299,8 @@ Patch87:	chromium-quiche-invalid-offsetof.patch
 Patch88:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
 # Fix missing cstring in remoting code
 Patch89:	chromium-84.0.4147.125-remoting-cstring.patch
+# Apply fix_textrels hack for i686 (even without lld)
+Patch90:	chromium-84.0.4147.125-i686-fix_textrels.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -918,6 +920,7 @@ udev.
 %patch87 -p1 -b .quiche-invalid-offset
 %patch88 -p1 -b .gn-gcc-cleanup
 %patch89 -p1 -b .remoting-cstring
+%patch90 -p1 -b .i686-textrels
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1905,7 +1908,8 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 %changelog
 * Mon Aug 17 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-2
-- try to link with gold on i686/aarch64 (on F33+)
+- try to link with gold on aarch64 (on F33+)
+- force fix_textrels fix in ffmpeg for i686 (even without lld)
 
 * Mon Aug 10 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-1
 - update to 84.0.4147.125
