@@ -21,6 +21,13 @@
 # We'd like to always have this on.
 %global use_vaapi 1
 
+# Seems like we might need this sometimes
+%global use_gold 0
+%if 0%{?fedora} >= 33
+%ifarch i686 aarch64
+%global use_gold 1
+%endif
+
 # Since no one liked replacing just the media components, we do not build shared anymore.
 %global shared 0
 
@@ -165,7 +172,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4147.125
-Release:	1%{?dist}
+Release:	2%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -1031,7 +1038,12 @@ CHROMIUM_CORE_GN_DEFINES+=' is_debug=false'
 CHROMIUM_CORE_GN_DEFINES+=' system_libdir="lib64"'
 %endif
 CHROMIUM_CORE_GN_DEFINES+=' google_api_key="%{api_key}" google_default_client_id="%{default_client_id}" google_default_client_secret="%{default_client_secret}"'
-CHROMIUM_CORE_GN_DEFINES+=' is_clang=false use_sysroot=false use_gold=false fieldtrial_testing_like_official_build=true use_lld=false rtc_enable_symbol_export=true'
+CHROMIUM_CORE_GN_DEFINES+=' is_clang=false use_sysroot=false fieldtrial_testing_like_official_build=true use_lld=false rtc_enable_symbol_export=true'
+%if %{use_gold}
+CHROMIUM_CORE_GN_DEFINES+=' use_gold=true'
+%else
+CHROMIUM_CORE_GN_DEFINES+=' use_gold=false'
+
 %if %{freeworld}
 CHROMIUM_CORE_GN_DEFINES+=' ffmpeg_branding="ChromeOS" proprietary_codecs=true'
 %else
@@ -1890,6 +1902,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Mon Aug 17 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-2
+- try to link with gold on i686/aarch64 (on F33+)
+
 * Mon Aug 10 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-1
 - update to 84.0.4147.125
 
