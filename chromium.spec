@@ -22,12 +22,8 @@
 %global use_vaapi 1
 
 # Seems like we might need this sometimes
+# Practically, no. But it's here in case we do.
 %global use_gold 0
-%if 0%{?fedora} >= 33
-%ifarch aarch64
-%global use_gold 1
-%endif
-%endif
 
 # Since no one liked replacing just the media components, we do not build shared anymore.
 %global shared 0
@@ -1908,7 +1904,6 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 %changelog
 * Mon Aug 17 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-2
-- try to link with gold on aarch64 (on F33+)
 - force fix_textrels fix in ffmpeg for i686 (even without lld)
 
 * Mon Aug 10 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-1
