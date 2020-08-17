@@ -1044,6 +1044,7 @@ CHROMIUM_CORE_GN_DEFINES+=' is_clang=false use_sysroot=false fieldtrial_testing_
 CHROMIUM_CORE_GN_DEFINES+=' use_gold=true'
 %else
 CHROMIUM_CORE_GN_DEFINES+=' use_gold=false'
+%endif
 
 %if %{freeworld}
 CHROMIUM_CORE_GN_DEFINES+=' ffmpeg_branding="ChromeOS" proprietary_codecs=true'
