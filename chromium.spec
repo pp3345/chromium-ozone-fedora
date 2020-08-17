@@ -24,7 +24,7 @@
 # Seems like we might need this sometimes
 %global use_gold 0
 %if 0%{?fedora} >= 33
-%ifarch i686 aarch64
+%ifarch aarch64
 %global use_gold 1
 %endif
 %endif
