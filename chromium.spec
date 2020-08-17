@@ -16,7 +16,7 @@
 %global build_headless 0
 
 # This doesn't work and it doesn't even build as of Chromium 83
-%global build_remoting 1
+%global build_remoting 0
 
 # We'd like to always have this on.
 %global use_vaapi 1
