@@ -27,6 +27,7 @@
 %ifarch i686 aarch64
 %global use_gold 1
 %endif
+%endif
 
 # Since no one liked replacing just the media components, we do not build shared anymore.
 %global shared 0
