@@ -165,7 +165,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4147.125
-Release:	1%{?dist}
+Release:	100%{?dist}.pp3345
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -1889,6 +1889,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Aug 18 2020 Yussuf Khalil <dev@pp3345.net> - 84.0.4147.125-100
+- Initial ozone-enabled release
+
 * Mon Aug 10 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-1
 - update to 84.0.4147.125
 
