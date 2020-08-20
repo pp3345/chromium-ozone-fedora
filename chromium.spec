@@ -25,6 +25,15 @@
 # Practically, no. But it's here in case we do.
 %global use_gold 0
 
+# 2020-08-20: F33+ aarch64 has a binutils bug trying to link clear_key_cdm
+# https://bugzilla.redhat.com/show_bug.cgi?id=1869884
+%global build_clear_key_cdm 1
+%if 0%{?fedora} >= 33
+%ifarch aarch64
+%global build_clear_key_cdm 0
+%endif
+%endif
+
 # Since no one liked replacing just the media components, we do not build shared anymore.
 %global shared 0
 
@@ -168,8 +177,8 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4147.125
-Release:	2%{?dist}
+Version:	%{majorversion}.0.4147.135
+Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -1493,7 +1502,9 @@ echo
 %build_target %{builddir} chrome
 %build_target %{builddir} chrome_sandbox
 %build_target %{builddir} chromedriver
+%if %{build_clear_key_cdm}
 %build_target %{builddir} clear_key_cdm
+%endif
 %build_target %{builddir} policy_templates
 
 %if %{build_remoting}
@@ -1554,6 +1565,10 @@ rm -rf %{buildroot}
 		cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
 		cp -a xdg-mime xdg-settings %{buildroot}%{chromium_path}
 		cp -a MEIPreload %{buildroot}%{chromium_path}
+		%if %{build_clear_key_cdm}
+			cp -a libclearkeycdm.so %{buildroot}%{chromium_path}
+		%endif
+
 		%if 0%{?shared}
 			cp -a lib*.so* %{buildroot}%{chromium_path}
 			# cp -p %%{buildroot}%{chromium_path}/libwidevinecdm.so{,.fedora}
@@ -1785,6 +1800,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 %if %{build_headless}
 %{chromium_path}/headless_lib.pak
 %endif
+%if %{build_clear_key_cdm}
+%{chromium_path}/libclearkeycdm.so
+%endif
 # %%{chromium_path}/mus_app_resources_*.pak
 %if 0
 %{chromium_path}/pyproto/
@@ -1903,6 +1921,12 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Thu Aug 20 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.135-1
+- update to 84.0.4147.135
+- conditionalize build_clear_key_cdm
+- disable build_clear_key_cdm on F33+ aarch64 until binutils bug is fixed
+- properly install libclearkeycdm.so everywhere else (whoops)
+
 * Mon Aug 17 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-2
 - force fix_textrels fix in ffmpeg for i686 (even without lld)
 
