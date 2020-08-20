@@ -1311,7 +1311,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/swiftshader' \
 	'third_party/swiftshader/third_party/astc-encoder' \
 	'third_party/swiftshader/third_party/llvm-subzero' \
-	'third_party/swiftshader/third_party/llvm-7.0' \
+	'third_party/swiftshader/third_party/llvm-10.0' \
 	'third_party/swiftshader/third_party/marl' \
 	'third_party/swiftshader/third_party/subzero' \
 	'third_party/swiftshader/third_party/SPIRV-Headers' \
