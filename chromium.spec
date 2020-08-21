@@ -28,11 +28,6 @@
 # 2020-08-20: F33+ aarch64 has a binutils bug trying to link clear_key_cdm
 # https://bugzilla.redhat.com/show_bug.cgi?id=1869884
 %global build_clear_key_cdm 1
-%if 0%{?fedora} >= 33
-%ifarch aarch64
-%global build_clear_key_cdm 0
-%endif
-%endif
 
 # Since no one liked replacing just the media components, we do not build shared anymore.
 %global shared 0
@@ -306,6 +301,8 @@ Patch88:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
 Patch89:	chromium-84.0.4147.125-remoting-cstring.patch
 # Apply fix_textrels hack for i686 (even without lld)
 Patch90:	chromium-84.0.4147.125-i686-fix_textrels.patch
+# Work around binutils bug in aarch64 (F33+)
+Patch91:	chromium-84.0.4147.125-aarch64-clearkeycdm-binutils-workaround.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -926,6 +923,7 @@ udev.
 %patch88 -p1 -b .gn-gcc-cleanup
 %patch89 -p1 -b .remoting-cstring
 %patch90 -p1 -b .i686-textrels
+%patch91 -p1 -b .aarch64-clearkeycdm-binutils-workaround
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1566,7 +1564,15 @@ rm -rf %{buildroot}
 		cp -a xdg-mime xdg-settings %{buildroot}%{chromium_path}
 		cp -a MEIPreload %{buildroot}%{chromium_path}
 		%if %{build_clear_key_cdm}
-			cp -a libclearkeycdm.so %{buildroot}%{chromium_path}
+			%ifarch i686
+				cp -a ClearKeyCdm/_platform_specific/linux_x86/libclearkeycdm.so %{buildroot}%{chromium_path}
+			%else
+				%ifarch x86_64
+					cp -a ClearKeyCdm/_platform_specific/linux_x64/libclearkeycdm.so %{buildroot}%{chromium_path}
+				%else
+					cp -a libclearkeycdm.so %{buildroot}%{chromium_path}
+				%endif
+			%endif
 		%endif
 
 		%if 0%{?shared}
