@@ -21,6 +21,14 @@
 # We'd like to always have this on.
 %global use_vaapi 1
 
+# Seems like we might need this sometimes
+# Practically, no. But it's here in case we do.
+%global use_gold 0
+
+# 2020-08-20: F33+ aarch64 has a binutils bug trying to link clear_key_cdm
+# https://bugzilla.redhat.com/show_bug.cgi?id=1869884
+%global build_clear_key_cdm 1
+
 # Since no one liked replacing just the media components, we do not build shared anymore.
 %global shared 0
 
@@ -164,8 +172,8 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4147.125
-Release:	100%{?dist}.pp3345
+Version:	%{majorversion}.0.4147.135
+Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -291,6 +299,10 @@ Patch87:	chromium-quiche-invalid-offsetof.patch
 Patch88:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
 # Fix missing cstring in remoting code
 Patch89:	chromium-84.0.4147.125-remoting-cstring.patch
+# Apply fix_textrels hack for i686 (even without lld)
+Patch90:	chromium-84.0.4147.125-i686-fix_textrels.patch
+# Work around binutils bug in aarch64 (F33+)
+Patch91:	chromium-84.0.4147.125-aarch64-clearkeycdm-binutils-workaround.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -910,6 +922,8 @@ udev.
 %patch87 -p1 -b .quiche-invalid-offset
 %patch88 -p1 -b .gn-gcc-cleanup
 %patch89 -p1 -b .remoting-cstring
+%patch90 -p1 -b .i686-textrels
+%patch91 -p1 -b .aarch64-clearkeycdm-binutils-workaround
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1031,7 +1045,13 @@ CHROMIUM_CORE_GN_DEFINES+=' is_debug=false'
 CHROMIUM_CORE_GN_DEFINES+=' system_libdir="lib64"'
 %endif
 CHROMIUM_CORE_GN_DEFINES+=' google_api_key="%{api_key}" google_default_client_id="%{default_client_id}" google_default_client_secret="%{default_client_secret}"'
-CHROMIUM_CORE_GN_DEFINES+=' is_clang=false use_sysroot=false use_gold=false fieldtrial_testing_like_official_build=true use_lld=false use_ozone=true rtc_enable_symbol_export=true'
+CHROMIUM_CORE_GN_DEFINES+=' is_clang=false use_sysroot=false fieldtrial_testing_like_official_build=true use_lld=false use_ozone=true rtc_enable_symbol_export=true'
+%if %{use_gold}
+CHROMIUM_CORE_GN_DEFINES+=' use_gold=true'
+%else
+CHROMIUM_CORE_GN_DEFINES+=' use_gold=false'
+%endif
+
 %if %{freeworld}
 CHROMIUM_CORE_GN_DEFINES+=' ffmpeg_branding="ChromeOS" proprietary_codecs=true'
 %else
@@ -1288,7 +1308,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/swiftshader' \
 	'third_party/swiftshader/third_party/astc-encoder' \
 	'third_party/swiftshader/third_party/llvm-subzero' \
-	'third_party/swiftshader/third_party/llvm-7.0' \
+	'third_party/swiftshader/third_party/llvm-10.0' \
 	'third_party/swiftshader/third_party/marl' \
 	'third_party/swiftshader/third_party/subzero' \
 	'third_party/swiftshader/third_party/SPIRV-Headers' \
@@ -1479,7 +1499,9 @@ echo
 %build_target %{builddir} chrome
 %build_target %{builddir} chrome_sandbox
 %build_target %{builddir} chromedriver
+%if %{build_clear_key_cdm}
 %build_target %{builddir} clear_key_cdm
+%endif
 %build_target %{builddir} policy_templates
 
 %if %{build_remoting}
@@ -1540,6 +1562,18 @@ rm -rf %{buildroot}
 		cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
 		cp -a xdg-mime xdg-settings %{buildroot}%{chromium_path}
 		cp -a MEIPreload %{buildroot}%{chromium_path}
+		%if %{build_clear_key_cdm}
+			%ifarch i686
+				cp -a ClearKeyCdm/_platform_specific/linux_x86/libclearkeycdm.so %{buildroot}%{chromium_path}
+			%else
+				%ifarch x86_64
+					cp -a ClearKeyCdm/_platform_specific/linux_x64/libclearkeycdm.so %{buildroot}%{chromium_path}
+				%else
+					cp -a libclearkeycdm.so %{buildroot}%{chromium_path}
+				%endif
+			%endif
+		%endif
+
 		%if 0%{?shared}
 			cp -a lib*.so* %{buildroot}%{chromium_path}
 			# cp -p %%{buildroot}%{chromium_path}/libwidevinecdm.so{,.fedora}
@@ -1771,6 +1805,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 #%if %%{build_headless}
 %{chromium_path}/headless_lib.pak
 #%endif
+%if %{build_clear_key_cdm}
+%{chromium_path}/libclearkeycdm.so
+%endif
 # %%{chromium_path}/mus_app_resources_*.pak
 %if 0
 %{chromium_path}/pyproto/
@@ -1889,8 +1926,17 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Thu Aug 20 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.135-1
+- update to 84.0.4147.135
+- conditionalize build_clear_key_cdm
+- disable build_clear_key_cdm on F33+ aarch64 until binutils bug is fixed
+- properly install libclearkeycdm.so everywhere else (whoops)
+
 * Tue Aug 18 2020 Yussuf Khalil <dev@pp3345.net> - 84.0.4147.125-100
 - Initial ozone-enabled release
+
+* Mon Aug 17 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-2
+- force fix_textrels fix in ffmpeg for i686 (even without lld)
 
 * Mon Aug 10 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.125-1
 - update to 84.0.4147.125
