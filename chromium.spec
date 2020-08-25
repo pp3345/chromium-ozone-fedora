@@ -173,7 +173,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4147.135
-Release:	1%{?dist}
+Release:	100%{?dist}.pp3345
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -1926,6 +1926,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Aug 25 2020 Yussuf Khalil <dev@pp3345.net> - 84.0.4147.135-100
+- Rebase to 84.0.4147.135-1.fc32
+
 * Thu Aug 20 2020 Tom Callaway <spot@fedoraproject.org> - 84.0.4147.135-1
 - update to 84.0.4147.135
 - conditionalize build_clear_key_cdm
