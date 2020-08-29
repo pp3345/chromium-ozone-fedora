@@ -165,15 +165,15 @@ BuildRequires:  libicu-devel >= 5.4
 %global chromoting_client_id %nil
 %endif
 
-%global majorversion 84
+%global majorversion 85
 
 %if %{freeworld}
 Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4147.135
-Release:	100%{?dist}.pp3345
+Version:	%{majorversion}.0.4183.83
+Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -215,8 +215,6 @@ Patch10:	chromium-79.0.3945.56-widevine-other-locations.patch
 Patch11:	chromium-71.0.3578.98-py2-bootstrap.patch
 # Add "Fedora" to the user agent string
 Patch12:	chromium-79.0.3945.56-fedora-user-agent.patch
-# Find nss include files under nss3
-Patch13:	chromium-84.0.4147.89-nss3.patch
 
 # rename function to avoid conflict with rawhide glibc "gettid()"
 Patch50:	chromium-75.0.3770.80-grpc-gettid-fix.patch
@@ -230,79 +228,59 @@ Patch53:	chromium-77.0.3865.75-gcc-include-memory.patch
 Patch54:	chromium-79-gcc-protobuf-alignas.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-78-protobuf-RepeatedPtrField-export.patch
 Patch55:	chromium-78-protobuf-RepeatedPtrField-export.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-base-has_bultin.patch
-Patch56:	chromium-84-base-has_bultin.patch
-# /../../ui/base/cursor/ozone/bitmap_cursor_factory_ozone.cc:53:15: error: 'find_if' is not a member of 'std'; did you mean 'find'? 
-Patch57:	chromium-79.0.3945.56-fix-find_if.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-80-QuicStreamSendBuffer-deleted-move-constructor.patch
-Patch58:	chromium-80-QuicStreamSendBuffer-deleted-move-constructor.patch
+Patch57:	chromium-80-QuicStreamSendBuffer-deleted-move-constructor.patch
 # ../../third_party/perfetto/include/perfetto/base/task_runner.h:48:55: error: 'uint32_t' has not been declared
-Patch59:	chromium-80.0.3987.87-missing-cstdint-header.patch
-# ../../third_party/webrtc/modules/audio_processing/aec3/clockdrift_detector.h:34:3: error: 'size_t' does not name a type
-Patch60:	chromium-83.0.4103.61-missing-cstddef-header.patch
+Patch58:	chromium-80.0.3987.87-missing-cstdint-header.patch
 # Missing <cstring> (thanks c++17)
-Patch61:	chromium-80.0.3987.106-missing-cstring-header.patch
+Patch60:	chromium-80.0.3987.106-missing-cstring-header.patch
 # prepare for using system ffmpeg (clean)
 # http://svnweb.mageia.org/packages/cauldron/chromium-browser-stable/current/SOURCES/chromium-53-ffmpeg-no-deprecation-errors.patch?view=markup
-Patch62:	chromium-53-ffmpeg-no-deprecation-errors.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-cross_variant_mojo_util-remove-noexcept.patch
-Patch63:	chromium-84-cross_variant_mojo_util-remove-noexcept.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-83-WebUI-fix-template-specialization.patch
-Patch64:	chromium-83-WebUI-fix-template-specialization.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-VectorBuffer-fix-template-specialization.patch
-Patch65:	chromium-84-VectorBuffer-fix-template-specialization.patch
+Patch61:	chromium-53-ffmpeg-no-deprecation-errors.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-iterator.patch
-Patch66:	chromium-83-gcc-iterator.patch
+Patch62:	chromium-83-gcc-iterator.patch
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/chromium-83-gcc-compatibility.patch
-Patch67:	chromium-83-gcc-compatibility.patch
+Patch63:	chromium-83-gcc-compatibility.patch
 # Fix skia's handling of no_sanitize attributes to work with gcc
-Patch68:	chromium-skia-no_sanitize.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-skia-no_sanitize.patch
+Patch64:	chromium-skia-no_sanitize.patch
 # Work around aarch64 gcc bug (PR95726)
-Patch69:	chromium-83.0.4103.97-gcc10-aarch64-hack.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-AXObject-stl-iterator.patch
-Patch70:	chromium-84-AXObject-stl-iterator.patch
+Patch65:	chromium-83.0.4103.97-gcc10-aarch64-hack.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-84-blink-disable-clang-format.patch
-Patch71:	chromium-84-blink-disable-clang-format.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-crashpad-include-cstring.patch
-Patch72:	chromium-84-crashpad-include-cstring.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-FilePath-add-noexcept.patch
-Patch73:	chromium-84-FilePath-add-noexcept.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-fix-decltype.patch
-Patch74:	chromium-84-fix-decltype.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-flat_map-flat_tree-add-noexcept.patch
-Patch75:	chromium-84-flat_map-flat_tree-add-noexcept.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-gcc-DCHECK_EQ-unique_ptr.patch
-Patch76:	chromium-84-gcc-DCHECK_EQ-unique_ptr.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-gcc-DOMRect-constexpr.patch
-Patch77:	chromium-84-gcc-DOMRect-constexpr.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-gcc-use-brace-initializer.patch
-Patch78:	chromium-84-gcc-use-brace-initializer.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-ListContainerHelper-include-cstring.patch
-Patch79:	chromium-84-ListContainerHelper-include-cstring.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-ozone-include.patch
-Patch80:	chromium-84-ozone-include.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-revert-manage-ManifestManagerHost-per-document.patch
-Patch81:	chromium-84-revert-manage-ManifestManagerHost-per-document.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-std-vector-const.patch
-Patch82:	chromium-84-std-vector-const.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-84-TraceInCollectionTrait-fix-template-specialization.patch
-Patch83:	chromium-84-TraceInCollectionTrait-fix-template-specialization.patch
+Patch66:	chromium-84-blink-disable-clang-format.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-ozone-include.patch
+Patch67:	chromium-85-ozone-include.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-blink-gcc-diagnostic-pragma.patch
-Patch84:	chromium-blink-gcc-diagnostic-pragma.patch
-# https://github.com/stha09/chromium-patches/blob/master/chromium-clang_lto_visibility_public.patch
-Patch85:	chromium-clang_lto_visibility_public.patch
+Patch68:	chromium-blink-gcc-diagnostic-pragma.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-fix-char_traits.patch
-Patch86:	chromium-fix-char_traits.patch
+Patch69:	chromium-fix-char_traits.patch
 # https://github.com/stha09/chromium-patches/blob/master/chromium-quiche-invalid-offsetof.patch
-Patch87:	chromium-quiche-invalid-offsetof.patch
+Patch70:	chromium-quiche-invalid-offsetof.patch
 # Silence GCC warnings during gn compile
-Patch88:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
+Patch71:	chromium-84.0.4147.105-gn-gcc-cleanup.patch
 # Fix missing cstring in remoting code
-Patch89:	chromium-84.0.4147.125-remoting-cstring.patch
+Patch72:	chromium-84.0.4147.125-remoting-cstring.patch
 # Apply fix_textrels hack for i686 (even without lld)
-Patch90:	chromium-84.0.4147.125-i686-fix_textrels.patch
+Patch73:	chromium-84.0.4147.125-i686-fix_textrels.patch
 # Work around binutils bug in aarch64 (F33+)
-Patch91:	chromium-84.0.4147.125-aarch64-clearkeycdm-binutils-workaround.patch
+Patch74:	chromium-84.0.4147.125-aarch64-clearkeycdm-binutils-workaround.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-FrameWidget-namespace.patch
+Patch75:	chromium-85-FrameWidget-namespace.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-NearbyConnection-abstract.patch
+Patch76:	chromium-85-NearbyConnection-abstract.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-oscillator_node-cast.patch
+Patch77:	chromium-85-oscillator_node-cast.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-ostream-operator.patch
+Patch78:	chromium-85-ostream-operator.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-sim_hash-include.patch
+Patch79:	chromium-85-sim_hash-include.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-DelayNode-cast.patch
+Patch80:	chromium-85-DelayNode-cast.patch
+# https://github.com/stha09/chromium-patches/blob/master/chromium-85-NearbyShareEncryptedMetadataKey-include.patch
+Patch81:	chromium-85-NearbyShareEncryptedMetadataKey-include.patch
+# https://chromium.googlesource.com/chromium/src/+/17edd5225a9e6a388a9560efe20362a1a0d86694
+Patch82:	chromium-85.0.4183.83-gcc-not-auto.patch
+
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -574,6 +552,14 @@ BuildRequires:	thai-scalable-garuda-fonts
 BuildRequires:	lohit-devanagari-fonts
 BuildRequires:	lohit-tamil-fonts
 BuildRequires:	google-noto-sans-khmer-fonts
+BuildRequires:	google-noto-emoji-color-fonts
+%if 0%{?fedora} >= 30
+BuildRequires:	google-noto-sans-symbols2-fonts
+BuildRequires:	google-noto-sans-tibetan-fonts
+%else
+Source114:	https://github.com/googlefonts/noto-fonts/blob/master/unhinted/NotoSansSymbols2/NotoSansSymbols2-Regular.ttf
+Source115:	https://github.com/googlefonts/noto-fonts/blob/master/hinted/NotoSansTibetan/NotoSansTibetan-Regular.ttf
+%endif
 %endif
 # using the built from source version on aarch64
 BuildRequires:	ninja-build
@@ -879,7 +865,6 @@ udev.
 %patch9 -p1 -b .gcc9
 %patch10 -p1 -b .widevine-other-locations
 %patch11 -p1 -b .py2
-%patch13 -p1 -b .nss3
 
 # Short term fixes (usually gcc and backports)
 %patch50 -p1 -b .gettid-fix
@@ -888,42 +873,31 @@ udev.
 %patch53 -p1 -b .gcc-include-memory
 %patch54 -p1 -b .base-gcc-no-alignas
 %patch55 -p1 -b .protobuf-export
-%patch56 -p1 -b .clang-supports-location-builtins
-%patch57 -p1 -b .fix-find_if
-%patch58 -p1 -b .gcc-quiche
-%patch59 -p1 -b .missing-cstdint
-%patch60 -p1 -b .missing-cstddef
-%patch61 -p1 -b .missing-cstring
-%patch62 -p1 -b .ffmpeg-deprecations
-%patch63 -p1 -b .gcc-noexcept
-%patch64 -p1 -b .gcc-template
-%patch65 -p1 -b .gcc-template2
-%patch66 -p1 -b .gcc-iterator2
-%patch67 -p1 -b .gcc-compatibility
-%patch68 -p1 -b .gcc-no_sanitize
-%patch69 -p1 -b .gcc10-aarch64-hack
-%patch70 -p1 -b .AXObject-stl-iterator
-%patch71 -p1 -b .blink-disable-clang-format
-%patch72 -p1 -b .crashpad-include-cstring
-%patch73 -p1 -b .FilePath-add-noexcept
-%patch74 -p1 -b .fix-decltype
-%patch75 -p1 -b .flat_map-flat_tree-add-noexcept
-%patch76 -p1 -b .gcc-DCHECK_EQ-unique-ptr
-%patch77 -p1 -b .gcc-DOMRect-constexpr
-%patch78 -p1 -b .gcc-use-brace-initializer
-%patch79 -p1 -b .ListContainerHelper-include-cstring
-%patch80 -p1 -b .ozone-include
-%patch81 -p1 -b .revert-manage-ManifestManagerHost-per-document
-%patch82 -p1 -b .std-vector-const
-%patch83 -p1 -b .TraceInCollectionTrait-fix-template-specialization
-%patch84 -p1 -b .blink-gcc-diagnostic-pragma
-%patch85 -p1 -b .clang_lto_visibility_public
-%patch86 -p1 -b .fix-char_traits
-%patch87 -p1 -b .quiche-invalid-offset
-%patch88 -p1 -b .gn-gcc-cleanup
-%patch89 -p1 -b .remoting-cstring
-%patch90 -p1 -b .i686-textrels
-%patch91 -p1 -b .aarch64-clearkeycdm-binutils-workaround
+%patch57 -p1 -b .gcc-quiche
+%patch58 -p1 -b .missing-cstdint
+%patch60 -p1 -b .missing-cstring
+%patch61 -p1 -b .ffmpeg-deprecations
+%patch62 -p1 -b .gcc-iterator2
+%patch63 -p1 -b .gcc-compatibility
+%patch64 -p1 -b .gcc-no_sanitize
+%patch65 -p1 -b .gcc10-aarch64-hack
+%patch66 -p1 -b .blink-disable-clang-format
+%patch67 -p1 -b .ozone-include
+%patch68 -p1 -b .blink-gcc-diagnostic-pragma
+%patch69 -p1 -b .fix-char_traits
+%patch70 -p1 -b .quiche-invalid-offset
+%patch71 -p1 -b .gn-gcc-cleanup
+%patch72 -p1 -b .remoting-cstring
+%patch73 -p1 -b .i686-textrels
+%patch74 -p1 -b .aarch64-clearkeycdm-binutils-workaround
+%patch75 -p1 -b .FrameWidget-namespace
+%patch76 -p1 -b .NearbyConnection-abstract
+%patch77 -p1 -b .oscillator_node-cast
+%patch78 -p1 -b .ostream-operator
+%patch79 -p1 -b .sim_hash-include
+%patch80 -p1 -b .DelayNode-cast
+%patch81 -p1 -b .NearbyShareEncryptedMetadataKey-include
+%patch82 -p1 -b .gcc-not-auto
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1035,6 +1009,12 @@ cp -a /usr/share/fonts/thai-scalable/Garuda.ttf .
 %endif
 cp -a /usr/share/fonts/lohit-devanagari/Lohit-Devanagari.ttf /usr/share/fonts/lohit-tamil/Lohit-Tamil.ttf .
 cp -a /usr/share/fonts/google-noto/NotoSansKhmer-Regular.ttf .
+cp -a /usr/share/fonts/google-noto-emoji/NotoColorEmoji.ttf .
+%if 0%{?fedora} >= 30
+cp -a /usr/share/fonts/google-noto/NotoSansSymbols2-Regular.ttf /usr/share/fonts/google-noto/NotoSansTibetan-Regular.ttf .
+%else
+cp -a %{SOURCE114} %{SOURCE115} .
+%endif
 popd
 %endif
 
@@ -1093,7 +1073,7 @@ export CHROMIUM_BROWSER_GN_DEFINES
 
 CHROMIUM_HEADLESS_GN_DEFINES=""
 CHROMIUM_HEADLESS_GN_DEFINES+=' ozone_auto_platforms=false ozone_platform="headless" ozone_platform_headless=true'
-CHROMIUM_HEADLESS_GN_DEFINES+=' headless_use_embedded_resources=true icu_use_data_file=false v8_use_external_startup_data=false'
+CHROMIUM_HEADLESS_GN_DEFINES+=' headless_use_embedded_resources=false icu_use_data_file=false v8_use_external_startup_data=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' enable_nacl=false enable_print_preview=false enable_remoting=false use_alsa=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' use_cups=false use_dbus=false use_gio=false use_kerberos=false use_libpci=false'
 CHROMIUM_HEADLESS_GN_DEFINES+=' use_pulseaudio=false use_udev=false use_gtk=false use_glib=false'
@@ -1258,6 +1238,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/node' \
 	'third_party/node/node_modules/polymer-bundler/lib/third_party/UglifyJS2' \
 	'third_party/one_euro_filter' \
+	'third_party/opencv' \
 %if %{freeworld}
 	'third_party/openh264' \
 %endif
@@ -1331,6 +1312,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/widevine' \
         'third_party/woff2' \
 	'third_party/wuffs' \
+	'third_party/xcbproto' \
         'third_party/xdg-utils' \
         'third_party/zlib' \
 	'third_party/zlib/google' \
@@ -1926,6 +1908,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Wed Aug 26 2020 Tom Callaway <spot@fedoraproject.org> - 85.0.4183.83-1
+- update to 85.0.4183.83
+
 * Tue Aug 25 2020 Yussuf Khalil <dev@pp3345.net> - 84.0.4147.135-100
 - Rebase to 84.0.4147.135-1.fc32
 
