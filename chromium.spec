@@ -172,8 +172,8 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4183.83
-Release:	100%{?dist}.pp3345
+Version:	%{majorversion}.0.4183.102
+Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -1548,6 +1548,9 @@ rm -rf %{buildroot}
 		cp -a v8_context_snapshot.bin %{buildroot}%{chromium_path}
 		cp -a xdg-mime xdg-settings %{buildroot}%{chromium_path}
 		cp -a MEIPreload %{buildroot}%{chromium_path}
+		# This is ANGLE, not to be confused with the similarly named files under swiftshader/
+		cp -a libEGL.so* libGLESv2.so* %{buildroot}%{chromium_path}
+
 		%if %{build_clear_key_cdm}
 			%ifarch i686
 				cp -a ClearKeyCdm/_platform_specific/linux_x86/libclearkeycdm.so %{buildroot}%{chromium_path}
@@ -1767,6 +1770,8 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 %{chromium_path}/icudtl.dat
 %{chromium_path}/%{chromium_browser_channel}
 %{chromium_path}/%{chromium_browser_channel}.sh
+%{chromium_path}/libEGL.so*
+%{chromium_path}/libGLESv2.so*
 %{chromium_path}/MEIPreload/
 %ifarch x86_64 i686 aarch64
 %{chromium_path}/swiftshader/
@@ -1912,6 +1917,10 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Tue Sep  8 2020 Tom Callaway <spot@fedoraproject.org> - 85.0.4183.102-1
+- update to 85.0.4183.102
+- install ANGLE so files (libEGL.so, libGLESv2.so)
+
 * Sat Aug 29 2020 Yussuf Khalil <dev@pp3345.net> - 85.0.4183.83-100
 - Rebase to 85.0.4183.83-1.fc32
 
