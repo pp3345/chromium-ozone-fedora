@@ -1,11 +1,16 @@
 %define _lto_cflags %{nil}
 
+%global numjobs 10
+%ifarch aarch64
+%global numjobs 8
+%endif
+
 # Fancy build status, so we at least know, where we are..
 # %1 where
 # %2 what
 %global build_target() \
 	export NINJA_STATUS="[%2:%f/%t] " ; \
-	../depot_tools/ninja -C '%1' -vvv '%2'
+	../depot_tools/ninja -j %{numjobs} -C '%1' -vvv '%2'
 
 
 # This was faster when it worked, but it didn't always.
