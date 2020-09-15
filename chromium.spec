@@ -380,7 +380,6 @@ BuildRequires:	libudev-devel
 BuildRequires:	libuuid-devel
 BuildRequires:	libusb-devel
 BuildRequires:	libXdamage-devel
-BuildRequires:	libXScrnSaver-devel
 BuildRequires:	libXtst-devel
 BuildRequires:	xcb-proto
 BuildRequires:	mesa-libgbm-devel
