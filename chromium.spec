@@ -178,7 +178,7 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 Name:		chromium%{chromium_channel}
 %endif
 Version:	%{majorversion}.0.4183.121
-Release:	1%{?dist}
+Release:	100%{?dist}.pp3345
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -1923,6 +1923,9 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Sun Sep 27 2020 Yussuf Khalil <dev@pp3345.net> - 85.0.4183.121-100
+- Rebase to 85.0.4183.121-1.fc32
+
 * Mon Sep 21 2020 Tom Callaway <spot@fedoraproject.org> - 85.0.4183.121-1
 - update to 85.0.4183.121
 - apply upstream fix for networking issue with CookieMonster
