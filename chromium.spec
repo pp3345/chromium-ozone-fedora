@@ -177,8 +177,8 @@ Name:		chromium%{chromium_channel}%{nsuffix}
 %else
 Name:		chromium%{chromium_channel}
 %endif
-Version:	%{majorversion}.0.4183.102
-Release:	100%{?dist}.pp3345
+Version:	%{majorversion}.0.4183.121
+Release:	1%{?dist}
 %if %{?freeworld}
 %if %{?shared}
 # chromium-libs-media-freeworld
@@ -285,7 +285,8 @@ Patch80:	chromium-85-DelayNode-cast.patch
 Patch81:	chromium-85-NearbyShareEncryptedMetadataKey-include.patch
 # https://chromium.googlesource.com/chromium/src/+/17edd5225a9e6a388a9560efe20362a1a0d86694
 Patch82:	chromium-85.0.4183.83-gcc-not-auto.patch
-
+# https://github.com/chromium/chromium/commit/53478caee862624fc6d73516f8d64253854b146f
+Patch83:	chromium-85.0.4183.102-invalid-end-CookieMonster-53478ca.patch
 
 # Use lstdc++ on EPEL7 only
 Patch101:	chromium-75.0.3770.100-epel7-stdc++.patch
@@ -905,6 +906,7 @@ udev.
 %patch80 -p1 -b .DelayNode-cast
 %patch81 -p1 -b .NearbyShareEncryptedMetadataKey-include
 %patch82 -p1 -b .gcc-not-auto
+%patch83 -p1 -b .invalid-end-CookieMonster
 
 # Fedora branded user agent
 %if 0%{?fedora}
@@ -1921,6 +1923,10 @@ getent group chrome-remote-desktop >/dev/null || groupadd -r chrome-remote-deskt
 
 
 %changelog
+* Mon Sep 21 2020 Tom Callaway <spot@fedoraproject.org> - 85.0.4183.121-1
+- update to 85.0.4183.121
+- apply upstream fix for networking issue with CookieMonster
+
 * Fri Sep 11 2020 Yussuf Khalil <dev@pp3345.net> - 85.0.4183.102-100
 - Rebase to 85.0.4183.102-1.fc32
 
